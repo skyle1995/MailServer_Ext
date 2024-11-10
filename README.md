@@ -14,11 +14,11 @@
 或者自行修改启用php自带的imap扩展库，代码方案可以直接百度查询  
   
 3.额外内容：  
-<
 站点nginx配置添加以下规则，可以无需加.php访问  
+
     # 允许访问时省略掉webmail目录下的.php文件后缀  
     location /webmail/ {
       try_files $uri $uri/ $uri.php$is_args$args;
     }
->
+
 /webmail/ 为插件补丁安装路径  
