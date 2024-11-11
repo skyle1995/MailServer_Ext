@@ -20,7 +20,7 @@ $config = [
     "VerifyType" => 2,
     // imap服务验证模式填imap地址
     // imap 普通模式无需加端口，如：mail.163.com
-    // imap 安全模式需要加端口，如：mail.163.com:993
+    // imap ssl模式需要加端口，如：mail.163.com:993
     // 网页验证模式填网页登录地址，如：https://mail.163.com
     "VerifyAddr" => "https://mail.163.com",
     // 注册开关，true 开启 false 关闭
