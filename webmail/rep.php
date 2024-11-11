@@ -111,14 +111,15 @@ function submit_form($config) {
             $cookie = getHeader($header,"Set-Cookie");
             $location = getHeader($header,"Location");
             
-            if (getHttpStatusCode($header) === 200 || getHttpStatusCode($header) === 302) {
+            // 验证成功后会跳转，直接判断状态码
+            if (getHttpStatusCode($header) === 302) {
                 if(empty($location)) {
-                    $response = array("status" => false, "msg" => "重置失败，邮箱或密码错误！");
+                    $response = array("status" => false, "msg" => "账号密码校验失败，状态异常！");
                     exit(json_encode($response));
                 }
             } else {
                 // 这里也可以改为账号或密码错误的提示，反正是验证账号密码失败了
-                $response = array("status" => false, "msg" => "重置失败，服务器返回：" . getHttpStatusCode($header));
+                $response = array("status" => false, "msg" => "账号密码校验失败，错误码：" . getHttpStatusCode($header));
                 exit(json_encode($response));
             }
         } else {
