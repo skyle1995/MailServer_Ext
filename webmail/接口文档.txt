@@ -1,0 +1,90 @@
+注册接口：
+/plugin?action=a&name=mail_sys&s=add_mailbox
+
+提交参数：
+5.x
+quota=5+GB&username=邮箱账号&password=注册密码&full_name=邮箱名称&is_admin=0
+
+6.x
+quota=5+GB&username=邮箱账号&password=注册密码&full_name=邮箱名称&is_admin=0
+
+返回结果：
+5.x
+{
+    "status": true,
+    "msg": "\u589e\u52a0\u90ae\u7bb1\u7528\u6237[邮箱账号]\u6210\u529f!"
+}
+
+6.x
+{
+    "code": 0,
+    "status": true,
+    "msg": "\u589e\u52a0\u90ae\u7bb1\u7528\u6237[邮箱账号]\u6210\u529f!",
+    "data": {
+        "status": true,
+        "msg": "\u589e\u52a0\u90ae\u7bb1\u7528\u6237[邮箱账号]\u6210\u529f!"
+    },
+    "timestamp": 1736311745.9503005
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+改密接口：
+/plugin?action=a&name=mail_sys&s=update_mailbox
+
+提交数据：
+5.x
+quota=5+GB&username=邮箱账号&password=旧密码&full_name=邮箱名称&active=1&is_admin=0
+
+6.x
+quota=5+GB&username=邮箱账号&password=新密码&full_name=邮箱名称&active=1&is_admin=0
+
+返回结果：
+5.x
+{
+    "status": true,
+    "msg": "\u7f16\u8f91\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)"
+}
+
+6.x
+{
+    "code": 0,
+    "status": true,
+    "msg": "\u7f16\u8f91\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)",
+    "data": {
+        "status": true,
+        "msg": "\u7f16\u8f91\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)"
+    },
+    "timestamp": 1736311987.1043093
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+删除接口：
+/plugin?action=a&name=mail_sys&s=delete_mailbox
+
+提交数据：
+5.x
+username=邮箱账号
+
+6.x
+username=邮箱账号
+
+返回结果：
+5.x
+{
+    "status": true,
+    "msg": "\u5220\u9664\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)"
+}
+
+6.x
+{
+    "code": 0,
+    "status": true,
+    "msg": "\u5220\u9664\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)",
+    "data": {
+        "status": true,
+        "msg": "\u5220\u9664\u90ae\u7bb1\u7528\u6237\u6210\u529f! (邮箱账号)"
+    },
+    "timestamp": 1736312163.8022943
+}

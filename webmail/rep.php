@@ -12,47 +12,52 @@ include("common.php");
 $title = "重置密码";
 
 function submit_form($config) {
+    if(!isset($_POST['_user'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱账号！")));
+    if(!isset($_POST['_oldpass'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱旧密码！")));
+    if(!isset($_POST['_newpass'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱新密码！")));
+
     $_user = $_POST['_user'];
     $_oldpass = $_POST['_oldpass'];
     $_newpass = $_POST['_newpass'];
-    $_quota = $_POST['_quota'];
     
-    $username = $_user;
-    $password =  $_newpass;
-    
-    if (!is_numeric($_quota) or $_quota <= 0 or empty($_quota)) {
+    if(isset($_POST['_quota'])) {
+        $_quota = $_POST['_quota'];
+        if (!is_numeric($_quota) or $_quota <= 0 or empty($_quota)) {
+            $_quota = "5";
+        }
+    }else{
         $_quota = "5";
     }
     
     // 使用filter_var()函数和FILTER_VALIDATE_EMAIL过滤器来判断（冷门域名会判断错误，已弃用）
-    // if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+    // if (!filter_var($_user, FILTER_VALIDATE_EMAIL)) {
     //     $response = array("status" => false, "msg" => "提交邮箱不合法，请检查后再试！");
     //     exit(json_encode($response));
     // }
     
     // 检查邮箱是否在配置库
-    if (!isValidEmailDomain($username, $config['hosts'])) {
+    if (!isValidEmailDomain($_user, $config['hosts'])) {
         $response = array("status" => false, "msg" => "提交邮箱不存在，请检查后再试！");
         exit(json_encode($response));
     }
     
-    $atPos = strpos($username, '@');
+    $atPos = strpos($_user, '@');
     // 如果找到了@符号
     if ($atPos !== false) {
         // 使用substr()获取@符号左边的文本
-        $full_name = substr($username, 0, $atPos);
+        $full_name = substr($_user, 0, $atPos);
     } else {
         // 如果没有找到@符号
         $response = array("status" => false, "msg" => "未识别到账号名，请检查后再试！");
         exit(json_encode($response));
     }
     
-    if(!PasswordConfirmation($password)) {
+    if(!PasswordConfirmation($_newpass)) {
         $response = array("status" => false, "msg" => "密码包括大小写字母和数字且长度不小于8");
         exit(json_encode($response));
     }
 
-    if (empty($username) || empty($password) || empty($full_name)) {
+    if (empty($_user) || empty($_newpass) || empty($full_name)) {
         $response = array("status" => false, "msg" => "所有字段参数都必须填写！");
         exit(json_encode($response));
     }
@@ -64,7 +69,7 @@ function submit_form($config) {
     
     if($_oldpass !== $config["adminkey"]){
         if($config["VerifyType"] === 1){
-            $ret = CheckMailbox($config["VerifyAddr"], $username, $_oldpass);
+            $ret = CheckMailbox($config["VerifyAddr"], $_user, $_oldpass);
             if ($ret !== true) {
                 $response = array("status" => false, "msg" => "账号或密码错误，请重新尝试！");
                 exit(json_encode($response));
@@ -96,7 +101,7 @@ function submit_form($config) {
                 '_action' => 'login',
                 '_timezone' => 'Asia/Shanghai',
                 '_url' => '',
-                '_user' => $username,
+                '_user' => $_user,
                 '_pass' => $_oldpass
             ];
             
@@ -131,8 +136,8 @@ function submit_form($config) {
 
     $url = $config["panel"] . '/plugin?action=a&name=mail_sys&s=update_mailbox';
     $p_data = get_key_data($config["apikey"]) + array(
-        'username' => $username,
-        'password' => $password,
+        'username' => $_user,
+        'password' => $_newpass,
         'full_name' => $full_name,
         'quota' => $_quota . ' GB',
         'active' => 1,

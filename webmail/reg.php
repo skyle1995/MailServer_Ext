@@ -12,12 +12,20 @@ include("common.php");
 $title = "注册邮箱";
 
 function submit_form($config) {
+    if(!isset($_POST['_user'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱名称！")));
+    if(!isset($_POST['_pass'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱密码！")));
+    if(!isset($_POST['_host'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱后缀！")));
+
     $_user = $_POST['_user'];
     $_pass = $_POST['_pass'];
-    $_quota = $_POST['_quota'];
     $_host = $_POST['_host'];
-    
-    if (!is_numeric($_quota) or $_quota <= 0 or empty($_quota)) {
+
+    if(isset($_POST['_quota'])) {
+        $_quota = $_POST['_quota'];
+        if (!is_numeric($_quota) or $_quota <= 0 or empty($_quota)) {
+            $_quota = "5";
+        }
+    }else{
         $_quota = "5";
     }
     

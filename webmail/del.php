@@ -9,6 +9,9 @@ session_start();
 include("config.php");
 include("common.php");
 
+if(!isset($_POST['_user'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱账号！")));
+if(!isset($_POST['_key'])) exit(json_encode(array("status" => false, "msg" => "请正确提交超级密钥！")));
+
 $_user = $_POST['_user'];
 $_key = $_POST['_key'];
 
