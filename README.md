@@ -27,7 +27,7 @@
 2.0版本新增Api模式需要修改邮局文件  
 位置：`/www/server/panel/plugin/mail_sys/mail_sys_main.py`  
 搜索内容：`get_mailboxs`  
-在函数结尾`return return_msg({'data': data_list, 'page': page_data['page']})`  
+在函数结尾：`return return_msg({'data': data_list, 'page': page_data['page']})`  
 添加以下代码（换行，粘贴位置不能有空格或其他字符）：  
 ```
     def get_mailuser(self, args):
@@ -82,3 +82,5 @@
             # 返回数据到前端
             return return_msg({'data': data_list})
 ```
+图片示例：  
+![Image text](image/1736572489056.jpg)
