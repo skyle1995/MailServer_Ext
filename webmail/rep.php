@@ -48,7 +48,7 @@ function submit_form($config) {
         $full_name = substr($_user, 0, $atPos);
     } else {
         // 如果没有找到@符号
-        $response = array("status" => false, "msg" => "未识别到账号名，请检查后再试！");
+        $response = array("status" => false, "msg" => "电子邮件地址格式不正确，请检查后再试！");
         exit(json_encode($response));
     }
     
@@ -127,8 +127,35 @@ function submit_form($config) {
                 $response = array("status" => false, "msg" => "账号密码校验失败，错误码：" . getHttpStatusCode($header));
                 exit(json_encode($response));
             }
+        } elseif($config["VerifyType"] === 3) {
+            $url = $config["panel"] . '/plugin?action=a&name=mail_sys&s=get_mailuser';
+            $data = array('username' => $_user);
+            
+            // 精准模式 启用域名匹配模式
+            if($config["VerifyAddr"] === true) $data['domain'] = substr(strrchr($_user, '@'), 1);
+            
+            $p_data = get_key_data($config["apikey"]) + $data;
+            $result = curl_senior($url, "POST", http_build_query($p_data));
+            
+            $response = json_decode($result, true);
+            if(count($response["data"]['data']) >= 1) {
+                $userdata = $response["data"]['data'][0];
+                
+                if($_user !== $userdata['username']) {
+                    $response = array("status" => false, "msg" => "重置失败，邮箱账号不正确！");
+                    exit(json_encode($response));
+                }
+                
+                if($_oldpass !== $userdata['password']) {
+                    $response = array("status" => false, "msg" => "重置失败，邮箱密码不正确！");
+                    exit(json_encode($response));
+                }
+            } else {
+                $response = array("status" => false, "msg" => "重置失败，邮箱账号不存在！");
+                exit(json_encode($response));
+            }
         } else {
-            $response = array("status" => false, "msg" => "配置错误，请联系管理员！");
+            $response = array("status" => false, "msg" => "配置错误，请联系管理员处理！");
             exit(json_encode($response));
         }
         
@@ -164,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($config["openrep"]) {
         submit_form($config);
     } else {
-        $response = array("status" => false, "msg" => "重置密码已被禁用，请联系管理员处理！");
+        $response = array("status" => false, "msg" => "系统已禁止重置密码，请联系管理员处理！");
         exit(json_encode($response));
     }
 }

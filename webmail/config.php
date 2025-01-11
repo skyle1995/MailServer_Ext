@@ -16,13 +16,17 @@ $config = [
         "@163.com",
         "@189.com"
     ],
-    // 1 = imap 服务验证模式 / 2 = Roundcube Webmail 网页验证模式 
-    "VerifyType" => 2,
+    // 1 = imap 服务验证模式
+    // 2 = Roundcube Webmail Web验证模式 
+    // 3 = Api校验模式（需要修改增加邮局接口）
+    "VerifyType" => 3,
     // imap服务验证模式填imap地址
-    // imap 普通模式无需加端口，如：mail.163.com
-    // imap ssl模式需要加端口，如：mail.163.com:993
-    // 网页验证模式填网页登录地址，如：https://mail.163.com
-    "VerifyAddr" => "https://mail.163.com",
+    // imap 普通模式无需加端口，类型：字符串，如：mail.163.com
+    // imap 安全模式需要加端口，类型：字符串，如：mail.163.com:993
+    // Web验证模式网页登录地址，类型：字符串，如：https://mail.163.com
+    // Api校验模式可不填此参数，类型：布尔型，如：true（开启精确搜索模式）
+    "VerifyAddr" => true,
+    // 注册开关，true 开启 false 关闭
     // 注册开关，true 开启 false 关闭
     "openreg" => false,
     // 允许注册名称最低长度

@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($config["openreg"]) {
         submit_form($config);
     } else {
-        $response = array("status" => false, "msg" => "注册邮箱已被禁用，请联系管理员处理！");
+        $response = array("status" => false, "msg" => "系统已禁止注册邮箱，请联系管理员处理！");
         exit(json_encode($response));
     }
 }
