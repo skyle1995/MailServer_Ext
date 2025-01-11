@@ -24,7 +24,7 @@
 ```
 /webmail/ 为插件补丁安装路径  
   
-2.0版本新增Api模式需要修改邮局文件  
+# 2.0版本新增Api模式需要修改邮局文件  
 位置：`/www/server/panel/plugin/mail_sys/mail_sys_main.py`  
 搜索内容：`get_mailboxs`  
 在函数结尾：`return return_msg({'data': data_list, 'page': page_data['page']})`  
