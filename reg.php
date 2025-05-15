@@ -2,70 +2,58 @@
 // 注意：本项目仅用于学习交流使用，禁止用于非法用途！
 // 使用本插件、补丁产生的任何法律责任与本人无关，由使用者本人自行承担
 
-// 注册界面
-
 session_start();
+header('Content-type:text/json');
 
-include("config.php");
-include("common.php");
+require_once("config.php");
+require_once("common.php");
 
 $title = "注册邮箱";
 
+/**
+ * 提交表单数据以创建新邮箱账户
+ *
+ * @param array $config 系统配置数组
+ */
 function submit_form($config) {
-    if(!isset($_POST['_user'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱名称！")));
-    if(!isset($_POST['_pass'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱密码！")));
-    if(!isset($_POST['_host'])) exit(json_encode(array("status" => false, "msg" => "请正确提交邮箱后缀！")));
+    // 输入验证
+    validateFormInputs($_POST, ['_user', '_pass', '_host']);
 
-    $_user = $_POST['_user'];
-    $_pass = $_POST['_pass'];
-    $_host = $_POST['_host'];
+    $_user = sanitizeInput($_POST['_user']);
+    $_pass = sanitizeInput($_POST['_pass']);
+    $_host = sanitizeInput($_POST['_host']);
 
-    if(isset($_POST['_quota'])) {
-        $_quota = $_POST['_quota'];
-        if (!is_numeric($_quota) or $_quota <= 0 or empty($_quota)) {
-            $_quota = "5";
-        }
-    }else{
-        $_quota = "5";
+    // 处理配额
+    $_quota = isset($_POST['_quota']) && is_numeric($_POST['_quota']) && $_POST['_quota'] > 0 ? $_POST['_quota'] : 5;
+
+    // 去除@符号及其后的部分
+    if (strpos($_user, '@') !== false) {
+        $_user = substr($_user, 0, strpos($_user, '@'));
     }
-    
-    $atPos = strpos($_user, '@');
-    // 如果找到了@符号
-    if ($atPos !== false) {
-        // 使用substr()获取@符号左边的文本
-        $_user = substr($_user, 0, $atPos);
-    }
-    
+
+    // 验证邮箱主机名
     $_index = findEmailHostIndex($config["hosts"], $_host);
     if ($_index === null) {
-        $response = array("status" => false, "msg" => "邮箱后缀不合法，请检查后再试！", "index" => $_index);
-        exit(json_encode($response));
+        handleMsg(false, ERROR_INVALID_HOST);
     }
-    
-    if(!AccountConfirmation($_user, $config["RegLength"])) {
-        $response = array("status" => false, "msg" => "账号包括小写字母和数字且长度不小于" . $config["RegLength"]);
-        exit(json_encode($response));
-    }
-    
-    if(!PasswordConfirmation($_pass)) {
-        $response = array("status" => false, "msg" => "密码包括大小写字母和数字且长度不小于8");
-        exit(json_encode($response));
-    }
-    
-    $username = $_user . $config["hosts"][intval($_index)];
-    $password = $_pass;
-    $full_name = $_user;
 
-    if (empty($username) || empty($password) || empty($full_name)) {
-        $response = array("status" => false, "msg" => "所有字段参数都必须填写！");
-        exit(json_encode($response));
+    // 验证账号格式
+    if (!AccountConfirmation($_user, $config["regLength"])) {
+        handleMsg(false, ERROR_INVALID_ACCOUNT . $config["regLength"]);
     }
+
+    // 验证密码格式
+    if (!PasswordConfirmation($_pass)) {
+        handleMsg(false, ERROR_INVALID_PASSWORD);
+    }
+
+    $username = $_user . $config["hosts"][intval($_index)];
 
     $url = $config["panel"] . '/plugin?action=a&name=mail_sys&s=add_mailbox';
     $p_data = get_key_data($config["apikey"]) + array(
         'username' => $username,
-        'password' => $password,
-        'full_name' => $full_name,
+        'password' => $_pass,
+        'full_name' => $_user,
         'quota' => $_quota . ' GB',
         'is_admin' => "0"
     );
@@ -73,31 +61,38 @@ function submit_form($config) {
     $result = curl_senior($url, "POST", http_build_query($p_data));
 
     if ($result === FALSE) {
-        $response = array("status" => false, "msg" => "请求失败！");
+        handleMsg(false, ERROR_REQUEST_FAILED);
     } else {
         $response = json_decode($result, true);
         if ($response['status']) {
-            $response = array("status" => true, "msg" => "注册邮箱成功！");
+            handleMsg(true, SUCCESS_REGISTER_MAILBOX);
         } else {
-            if(!empty($response['msg'])){
-                $response = array("status" => false, "msg" => $response['msg']);
-            } else {
-                $response = array("status" => false, "msg" => $result);
-            }
+            handleMsg(false, !empty($response['msg']) ? $response['msg'] : ERROR_UNKNOWN);
         }
     }
-    exit(json_encode($response));
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($config["openreg"]) {
-        submit_form($config);
-    } else {
-        $response = array("status" => false, "msg" => "系统已禁止注册邮箱，请联系管理员处理！");
-        exit(json_encode($response));
+    if (!$config["openRep"]) {
+        handleMsg(false, ERROR_PASSWORD_REG_DISABLED);
     }
+
+    if (!isset($_POST['_key']) && !isset($_POST['_csrf'])) {
+        exit(json_encode(array("status" => false, "msg" => ERROR_CSRF_TOKEN)));
+    }
+    
+    if (!isset($_POST['_key']) && !validateCsrfToken($_POST['_csrf'])) {
+        exit(json_encode(array("status" => false, "msg" => ERROR_CSRF_TOKEN)));
+    }
+    
+    if(isset($_POST['_key']) && $_POST['_key'] !== $config["adminKey"]) {
+        exit(json_encode(array("status" => false, "msg" => ERROR_ADMIN_KEY_INVALID)));
+    }
+    
+    submit_form($config);
 }
 
+header('Content-type:text/html; charset=UTF-8');
 include("header.php");
 ?>
 <body class="task-login action-none">
@@ -106,6 +101,7 @@ include("header.php");
         <div id="layout-content" class="selected no-navbar" role="main">
             <img src="skins/elastic/images/logo.svg" id="logo" alt="Logo">
             <form id="login-form" name="login-form" method="post" class="propform">
+                <input type="hidden" name="_csrf" value="<?= generateCsrfToken(); ?>">
                 <table>
                     <tbody>
                         <tr>
@@ -130,11 +126,11 @@ include("header.php");
                             </td>
                             <td class="input">
                                 <select name="_host" id="rcmloginhost" class="custom-select">
-<?php
-    foreach ($config["hosts"] as $key => $val) {
-        echo "<option value='$key'>$val</option>";
-    }
-?>
+                                    <?php
+                                    foreach ($config["hosts"] as $key => $val) {
+                                        echo "<option value='$key'>" . htmlspecialchars($val) . "</option>";
+                                    }
+                                    ?>
                                 </select>
                             </td>
                         </tr>
@@ -143,8 +139,8 @@ include("header.php");
                 <p class="formbuttons"><button type="submit" id="rcmloginsubmit" class="button mainaction submit">注册</button></p>
                 <div class="message" id="message"></div>
                 <div id="login-footer" role="contentinfo" style="margin-top: 10px;">
-                    <?=$config["beian"]?>
-                    <?=$config["sitename"]?> · <a href="/">登录邮箱</a> · <a href="/webmail/rep">重置密码</a>
+                    <?php echo htmlspecialchars($config["beian"]); ?>
+                    <?php echo htmlspecialchars($config["sitename"]); ?> · <a href="/">登录邮箱</a> · <a href="/webmail/rep">重置密码</a>
                 </div>
             </form>
         </div>

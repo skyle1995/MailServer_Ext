@@ -19,21 +19,21 @@ $config = [
     // 1 = imap 服务验证模式
     // 2 = Roundcube Webmail Web验证模式 
     // 3 = Api校验模式（需要修改增加邮局接口）
-    "VerifyType" => 3,
+    "verifyType" => 3,
     // imap服务验证模式填imap地址
     // imap 普通模式无需加端口，类型：字符串，如：mail.163.com
     // imap 安全模式需要加端口，类型：字符串，如：mail.163.com:993
     // Web验证模式网页登录地址，类型：字符串，如：https://mail.163.com
     // Api校验模式可不填此参数，类型：布尔型，如：true（开启精确搜索模式）
-    "VerifyAddr" => true,
+    "verifyAddr" => true,
     // 注册开关，true 开启 false 关闭
     // 注册开关，true 开启 false 关闭
-    "openreg" => false,
+    "openReg" => false,
     // 允许注册名称最低长度
-    "RegLength" => 5,
+    "regLength" => 5,
     // 重置开关，true 开启 false 关闭
-    "openrep" => true,
+    "openRep" => true,
     // 超级秘钥（自定义，请勿泄露，否则会造成安全问题）
     // 用于不知道原始邮箱密码的情况下强制修改密码
-    "adminkey" => "12345678"
+    "adminKey" => "12345678"
 ];
