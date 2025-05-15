@@ -197,7 +197,7 @@ include("header.php");
                 <p class="formbuttons"><button type="submit" id="rcmloginsubmit" class="button mainaction submit">重置</button></p>
                 <div class="message" id="message"></div>
                 <div id="login-footer" role="contentinfo" style="margin-top: 10px;">
-                    <?= sanitizeInput($config["sitename"]); ?> · <a href="/">登录邮箱</a> · <a href="/webmail/reg">注册邮箱</a>
+                    <?= sanitizeInput($config["sitename"]); ?> · <a href="/">登录邮箱</a> · <a href="reg">注册邮箱</a>
                 </div>
             </form>
         </div>

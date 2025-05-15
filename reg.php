@@ -140,7 +140,7 @@ include("header.php");
                 <div class="message" id="message"></div>
                 <div id="login-footer" role="contentinfo" style="margin-top: 10px;">
                     <?php echo htmlspecialchars($config["beian"]); ?>
-                    <?php echo htmlspecialchars($config["sitename"]); ?> · <a href="/">登录邮箱</a> · <a href="/webmail/rep">重置密码</a>
+                    <?php echo htmlspecialchars($config["sitename"]); ?> · <a href="/">登录邮箱</a> · <a href="rep">重置密码</a>
                 </div>
             </form>
         </div>
