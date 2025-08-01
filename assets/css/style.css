@@ -1,0 +1,33 @@
+/**
+ * 自定义样式表
+ * 
+ * 这个文件包含网站的自定义CSS样式
+ */
+
+/* 全局样式 */
+body {
+    padding-top: 70px; /* 为固定导航栏留出空间 */
+}
+
+/* 页脚样式 */
+footer {
+    margin-top: 30px;
+    padding: 20px 0;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+/* 自定义按钮样式 */
+.btn-custom {
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    color: #ffffff;
+}
+
+.btn-custom:hover {
+    background-color: #46b8da;
+    border-color: #31b0d5;
+    color: #ffffff;
+}
+
+/* 在这里添加其他自定义样式 */
