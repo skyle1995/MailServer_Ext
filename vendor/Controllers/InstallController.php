@@ -131,14 +131,14 @@ class InstallController extends BaseController {
             }
             $configContent .= "];\n";
         } else {
-            $configContent .= "\n// 域名过滤表（隐藏/禁用）\n";
+            $configContent .= "// 域名过滤表（隐藏/禁用）\n";
             $configContent .= "\$config['exclude'] = [];\n";
         }
         
         // 写入配置文件
         if (file_put_contents($configFile, $configContent)) {
             // 安装成功，重定向到首页
-            $this->redirect('/?controller=home&action=index');
+            $this->redirect('./?controller=home&action=index');
         } else {
             // 安装失败，显示错误信息
             $this->template->assign('error', '配置文件写入失败，请检查目录权限');

@@ -8,8 +8,6 @@
 $config = [];
 // 站点名称
 $config['sitename'] = "Anonymous Online Webmail";
-// 底部版权信息
-$config['footer'] = "© " . date('Y') . " Anonymous Online Webmail. 保留所有权利。";
 // 宝塔面板地址
 $config['panel'] = "https://127.0.0.1:8888";
 // Api接口秘钥
@@ -31,3 +29,5 @@ $config['emailQuotaUnit'] =  "GB";
 $config['superKey'] =  "";
 // 域名过滤表（隐藏/禁用）
 $config['exclude'] = [];
+// 底部版权信息
+$config['footer'] = "© " . date('Y') . " Anonymous Online Webmail. 保留所有权利。";
