@@ -1,5 +1,5 @@
 <div class="panel panel-primary" style="max-width: 480px; margin: 0 auto; border-radius: 6px; box-shadow: none;">
-    <div class="panel-heading" style="text-align: center; border-radius: 6px 6px 0 0; border-bottom: 2px solid #2196F3;">
+    <div class="panel-heading" style="text-align: center; border-radius: 6px 6px 0 0; border-bottom: 0px solid rgb(120, 194, 255);">
         <h3 class="panel-title">注册邮箱账号</h3>
     </div>
     <div class="panel-body">

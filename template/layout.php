@@ -11,33 +11,6 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        body {
-            padding-top: 0; /* 移除顶部填充 */
-        }
-        .content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 70vh;
-            margin-top: 5vh;
-            padding-bottom: 60px; /* 添加底部填充，避免内容被固定页脚遮挡 */
-        }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            height: 80px;
-            width: 80px;
-            margin-bottom: 15px;
-        }
-        .logo-container h2 {
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-    </style>
 </head>
 <body>
     <main>
@@ -53,7 +26,7 @@
         </div>
     </main>
     
-    <footer class="footer" style="margin-top: 30px; padding: 15px 0; background-color: transparent;">
+    <footer class="footer">
         <div class="container">
             <p style="color: #757575; font-size: 13px; margin: 0;"><?php echo isset($footer) ? $footer : '© ' . date('Y') . ' 邮件服务器插件. 保留所有权利。'; ?></p>
         </div>

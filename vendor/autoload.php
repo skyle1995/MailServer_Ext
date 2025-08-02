@@ -83,13 +83,38 @@ function preloadCoreFiles() {
 preloadCoreFiles();
 
 // 加载配置文件
-$configFile = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.inc.php';
-if (file_exists($configFile)) {
-    // 包含配置文件，配置文件直接设置$config变量
-    require_once $configFile;
+$configDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+
+// 先加载默认配置文件
+$defaultConfigFile = $configDir . 'default.inc.php';
+if (file_exists($defaultConfigFile)) {
+    // 包含默认配置文件，配置文件直接设置$config变量
+    require_once $defaultConfigFile;
 } else {
-    // 如果配置文件不存在，初始化空配置
+    // 如果默认配置文件不存在，初始化空配置
     $config = [];
+}
+
+// 检查自定义配置文件是否存在
+$customConfigFile = $configDir . 'config.inc.php';
+$isConfigExists = file_exists($customConfigFile);
+
+// 如果存在自定义配置文件，则加载并覆盖默认配置
+if ($isConfigExists) {
+    // 包含自定义配置文件，配置文件中的设置会覆盖默认配置
+    require_once $customConfigFile;
+}
+
+// 检查是否需要跳转到安装页面
+// 排除安装控制器和静态资源请求
+$currentController = isset($_GET['controller']) ? strtolower($_GET['controller']) : '';
+$isInstallController = ($currentController === 'install');
+$isAssetRequest = (strpos($_SERVER['REQUEST_URI'], '/assets/') !== false);
+
+// 如果配置文件不存在，且不是安装控制器或静态资源请求，则跳转到安装页面
+if (!$isConfigExists && !$isInstallController && !$isAssetRequest) {
+    header('Location: ?controller=install');
+    exit;
 }
 
 /**

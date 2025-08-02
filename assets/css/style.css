@@ -29,8 +29,7 @@ footer {
     margin-top: 30px;
     padding: 15px 0;
     text-align: center;
-    position: fixed;
-    bottom: 0;
+    position: relative; /* 改为相对定位，使页脚跟随内容 */
     width: 100%;
     background-color: transparent;
     z-index: 100;
@@ -47,6 +46,16 @@ footer {
 .btn-custom:hover {
     background-color: #4babc7;
     color: #ffffff;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    margin-top: 5vh;
+    padding-bottom: 20px; /* 减少底部填充，因为页脚现在会自然跟随内容 */
 }
 
 /* 内容居中样式 */
@@ -78,7 +87,7 @@ footer {
 
 /* 扁平化网站标题样式 */
 .site-title {
-    font-size: 28px;
+    font-size: 23px;
     font-weight: 500;
     color: #2196F3;
     letter-spacing: 1px;
