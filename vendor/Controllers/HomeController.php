@@ -6,6 +6,7 @@ namespace Controllers;
 
 use Core\Network;
 use Core\Common;
+use Verification\ValidateCode;
 
 /**
  * HomeController类 - 处理首页相关请求
@@ -117,6 +118,25 @@ class HomeController extends BaseController {
         $this->display('register', [
             'domains' => $domains
         ]);
+    }
+    
+    /**
+     * 生成验证码图片
+     * 
+     * 生成验证码图片并将验证码保存到会话中
+     */
+    public function captchaAction() {
+        // 创建验证码对象
+        $validateCode = new ValidateCode();
+        
+        // 生成验证码图片
+        $validateCode->doimg();
+        
+        // 获取验证码并保存到会话中
+        $_SESSION['captcha_code'] = $validateCode->getCode();
+        
+        // 直接输出图片，不需要返回
+        exit;
     }
     
     /**

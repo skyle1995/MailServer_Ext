@@ -11,56 +11,54 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            padding-top: 0; /* 移除顶部填充 */
+        }
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            margin-top: 5vh;
+            padding-bottom: 60px; /* 添加底部填充，避免内容被固定页脚遮挡 */
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            height: 80px;
+            width: 80px;
+            margin-bottom: 15px;
+        }
+        .logo-container h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <!-- 品牌和切换按钮 -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
-                        <span class="sr-only">切换导航</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="index.php">
-                        <img src="assets/images/logo.svg" alt="Logo" style="height: 25px; display: inline-block; margin-right: 5px; vertical-align: middle;">
-                        <?php echo isset($sitename) ? $sitename : '邮件服务器插件'; ?>
-                    </a>
-                </div>
-
-                <!-- 导航链接 -->
-                <div class="collapse navbar-collapse" id="main-navbar">
-                    <?php 
-                    // 获取当前控制器和方法
-                    $currentController = isset($_GET['controller']) ? $_GET['controller'] : 'home';
-                    $currentAction = isset($_GET['action']) ? $_GET['action'] : 'index';
-                    ?>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="<?php echo ($currentController == 'home' && $currentAction == 'index') ? 'active' : ''; ?>"><a href=".">首页 <?php echo ($currentController == 'home' && $currentAction == 'index') ? '<span class="sr-only">(当前)</span>' : ''; ?></a></li>
-                        <li class="<?php echo ($currentController == 'home' && $currentAction == 'register') ? 'active' : ''; ?>"><a href="?controller=home&action=register">注册邮箱 <?php echo ($currentController == 'home' && $currentAction == 'register') ? '<span class="sr-only">(当前)</span>' : ''; ?></a></li>
-                        <li class="<?php echo ($currentController == 'home' && $currentAction == 'replace') ? 'active' : ''; ?>"><a href="?controller=home&action=replace">修改密码 <?php echo ($currentController == 'home' && $currentAction == 'replace') ? '<span class="sr-only">(当前)</span>' : ''; ?></a></li>
-                        <li class="<?php echo ($currentController == 'home' && $currentAction == 'about') ? 'active' : ''; ?>"><a href="?controller=home&action=about">关于我们 <?php echo ($currentController == 'home' && $currentAction == 'about') ? '<span class="sr-only">(当前)</span>' : ''; ?></a></li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container -->
-        </nav>
-    </header>
-    
     <main>
         <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+            <div class="content-wrapper">
+                <div class="logo-container">
+                    <img src="assets/images/logo.svg" alt="Logo">
+                    <h2 class="site-title"><?php echo isset($sitename) ? $sitename : 'Anonymous Online Webmail'; ?></h2>
+                </div>
+                <div class="col-md-8">
                     <?php echo $content; ?>
                 </div>
+    
+                <!-- 底部导航已移除 -->
             </div>
         </div>
     </main>
     
-    <footer class="footer" style="margin-top: 30px; padding: 20px 0;">
+    <footer class="footer" style="margin-top: 30px; padding: 15px 0; background-color: transparent;">
         <div class="container">
-            <p class="text-muted">&copy; <?php echo date('Y'); ?> <?php echo isset($sitename) ? $sitename : '邮件服务器插件'; ?>. 保留所有权利。</p>
+            <p style="color: #757575; font-size: 13px; margin: 0;"><?php echo isset($footer) ? $footer : '© ' . date('Y') . ' 邮件服务器插件. 保留所有权利。'; ?></p>
         </div>
     </footer>
     
@@ -70,7 +68,126 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <!-- Layer弹出层 -->
     <script src="assets/layer/layer/layer.js"></script>
+    <!-- 粒子效果库 (CDN版本) -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <!-- 自定义脚本 -->
     <script src="assets/js/main.js"></script>
+    <!-- 初始化粒子效果 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 创建粒子容器
+        const particlesContainer = document.createElement('div');
+        particlesContainer.id = 'particles-js';
+        document.body.insertBefore(particlesContainer, document.body.firstChild);
+        
+        // 初始化粒子效果
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 100,
+                        density: {
+                            enable: true,
+                            value_area: 1000
+                        }
+                    },
+                    color: {
+                        value: ["#2196F3", "#4CAF50", "#FF9800", "#9C27B0"]
+                    },
+                    shape: {
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: false,
+                        anim: {
+                            enable: false,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: {
+                            enable: false,
+                            speed: 40,
+                            size_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#2196F3",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 3,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "bounce",
+                        bounce: true,
+                        attract: {
+                            enable: true,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "repulse"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "bubble"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        grab: {
+                            distance: 180,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        bubble: {
+                            distance: 300,
+                            size: 60,
+                            duration: 2,
+                            opacity: 0.8,
+                            speed: 3
+                        },
+                        repulse: {
+                            distance: 150,
+                            duration: 0.4
+                        },
+                        push: {
+                            particles_nb: 6
+                        },
+                        remove: {
+                            particles_nb: 2
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+        } else {
+            console.error('粒子效果需要particlesJS库支持');
+        }
+    });
+    </script>
 </body>
 </html>

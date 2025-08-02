@@ -4,9 +4,15 @@
 
 namespace Controllers;
 
+use Core\Request;
 use Core\Validator;
-use Core\Network;
 use Core\Common;
+use Core\Network;
+
+// 确保会话已启动
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 /**
  * ApiController类 - 处理API请求
@@ -89,6 +95,7 @@ class ApiController extends BaseController {
         $fullName = $this->getPostParam('full_name');
         $password = $this->getPostParam('password');
         $confirmPassword = $this->getPostParam('confirm_password');
+        $captcha = $this->getPostParam('captcha');
         
         // 验证表单数据
         $validator = new Validator();
@@ -98,6 +105,15 @@ class ApiController extends BaseController {
         $validator->validate($fullName, 'required', '昵称不能为空');
         $validator->validate($password, 'required|min:8', '密码不能为空|密码长度不能少于8个字符');
         $validator->validate($confirmPassword, 'required|same:' . $password, '确认密码不能为空|两次输入的密码不一致');
+        $validator->validate($captcha, 'required', '验证码不能为空');
+        
+        // 验证验证码
+        if (!isset($_SESSION['captcha']) || strtolower($captcha) !== strtolower($_SESSION['captcha'])) {
+            return $this->jsonResponse([
+                'status' => 'error',
+                'message' => '验证码错误'
+            ], 400);
+        }
         
         // 如果验证失败，返回错误信息
         if ($validator->hasErrors()) {
@@ -211,6 +227,7 @@ class ApiController extends BaseController {
         $password = $this->getPostParam('password');
         $newPassword = $this->getPostParam('new_password');
         $confirmPassword = $this->getPostParam('confirm_password');
+        $captcha = $this->getPostParam('captcha');
         
         // 验证表单数据
         $validator = new Validator();
@@ -220,6 +237,15 @@ class ApiController extends BaseController {
         $validator->validate($password, 'required', '当前密码不能为空');
         $validator->validate($newPassword, 'required|min:8', '新密码不能为空|新密码长度不能少于8个字符');
         $validator->validate($confirmPassword, 'required|same:' . $newPassword, '确认密码不能为空|两次输入的密码不一致');
+        $validator->validate($captcha, 'required', '验证码不能为空');
+        
+        // 验证验证码
+        if (!isset($_SESSION['captcha']) || strtolower($captcha) !== strtolower($_SESSION['captcha'])) {
+            return $this->jsonResponse([
+                'status' => 'error',
+                'message' => '验证码错误'
+            ], 400);
+        }
         
         // 如果验证失败，返回错误信息
         if ($validator->hasErrors()) {

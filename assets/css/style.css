@@ -6,28 +6,206 @@
 
 /* 全局样式 */
 body {
-    padding-top: 70px; /* 为固定导航栏留出空间 */
+    padding-top: 0; /* 移除顶部填充 */
+    background-color: #ffffff;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    position: relative; /* 为粒子背景定位 */
+    overflow-x: hidden; /* 防止水平滚动条 */
+}
+
+/* 粒子背景样式 */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none; /* 允许点击穿透 */
 }
 
 /* 页脚样式 */
 footer {
     margin-top: 30px;
-    padding: 20px 0;
-    border-top: 1px solid #e5e5e5;
+    padding: 15px 0;
     text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: transparent;
+    z-index: 100;
 }
 
 /* 自定义按钮样式 */
 .btn-custom {
     background-color: #5bc0de;
-    border-color: #46b8da;
+    border: none;
     color: #ffffff;
+    border-radius: 4px;
 }
 
 .btn-custom:hover {
-    background-color: #46b8da;
-    border-color: #31b0d5;
+    background-color: #4babc7;
     color: #ffffff;
 }
 
-/* 在这里添加其他自定义样式 */
+/* 内容居中样式 */
+.content-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    margin-top: 20vh;
+}
+
+/* Logo容器样式 */
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-container img {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.logo-container h2 {
+    font-weight: 300;
+    color: #333;
+}
+
+/* 扁平化网站标题样式 */
+.site-title {
+    font-size: 28px;
+    font-weight: 500;
+    color: #2196F3;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.site-title:hover {
+    color: #1976D2;
+}
+
+/* 验证码图片样式 */
+#captcha_img {
+    border: 1px solid #eaeaea;
+    height: 40px !important;
+    border-radius: 4px;
+}
+
+/* 帮助文本样式 */
+.help-block {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.text-danger {
+    color: #F44336;
+}
+
+/* 面板样式 */
+.panel {
+    border-radius: 6px;
+    border: 1px solid #eaeaea;
+    margin-top: 50px;
+    overflow: hidden;
+}
+
+.panel-heading {
+    border-radius: 6px 6px 0 0;
+    padding: 15px;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+/* 表单样式 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-group-addon {
+    background-color: #fafafa;
+    border: 1px solid #eaeaea;
+    color: #555;
+    min-width: 40px;
+    border-radius: 4px 0 0 4px;
+}
+
+.form-control {
+    height: 40px;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #2196F3;
+    outline: none;
+    box-shadow: none;
+}
+
+select.form-control {
+    padding-left: 10px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+/* 按钮样式 */
+.btn {
+    border-radius: 4px;
+    margin: 0 5px;
+    border: none;
+    font-weight: 400;
+}
+
+.btn-lg {
+    padding: 10px 20px;
+    font-size: 16px;
+    min-width: 120px;
+}
+
+.btn-primary {
+    background-color: #2196F3;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #1976D2;
+}
+
+.btn-default {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-success {
+    background-color: #4CAF50;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background-color: #388E3C;
+}

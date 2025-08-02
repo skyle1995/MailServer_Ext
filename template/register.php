@@ -1,74 +1,93 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">
+<div class="panel panel-primary" style="max-width: 480px; margin: 0 auto; border-radius: 6px; box-shadow: none;">
+    <div class="panel-heading" style="text-align: center; border-radius: 6px 6px 0 0; border-bottom: 2px solid #2196F3;">
         <h3 class="panel-title">注册邮箱账号</h3>
     </div>
     <div class="panel-body">
         <div id="server-messages"></div>
-        <form class="form-horizontal" id="registerForm">
+        <form id="registerForm">
             <div class="form-group">
-                <label for="username" class="col-sm-3 control-label">注册账号</label>
-                <div class="col-sm-9">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入账号名" value="<?php echo isset($username) ? $username : ''; ?>" required>
-                        <div class="input-group-addon">@</div>
-                        <select class="form-control" id="domain" name="domain" required>
-                            <option value="">请选择后缀</option>
-                            <?php if (isset($domains) && is_array($domains)): ?>
-                                <?php foreach ($domains as $domain): ?>
-                                <option value="<?php echo $domain; ?>" <?php echo (isset($selected_domain) && $selected_domain == $domain) ? 'selected' : ''; ?>>
-                                    <?php echo $domain; ?>
-                                </option>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </select>
-                    </div>
-                    <?php if (isset($errors['username'])): ?>
-                    <span class="help-block text-danger"><?php echo $errors['username']; ?></span>
-                    <?php endif; ?>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入账号名" value="<?php echo isset($username) ? $username : ''; ?>" required>
+                </div>
+                <?php if (isset($errors['username'])): ?>
+                <span class="help-block text-danger"><?php echo $errors['username']; ?></span>
+                <?php endif; ?>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                    <select class="form-control" id="domain" name="domain" required>
+                        <option value="">请选择邮箱后缀</option>
+                        <?php if (isset($domains) && is_array($domains)): ?>
+                            <?php foreach ($domains as $domain): ?>
+                            <option value="<?php echo $domain; ?>" <?php echo (isset($selected_domain) && $selected_domain == $domain) ? 'selected' : ''; ?>>
+                                <?php echo $domain; ?>
+                            </option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
                 </div>
             </div>
             
             <div class="form-group">
-                <label for="full_name" class="col-sm-3 control-label">注册昵称</label>
-                <div class="col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
                     <input type="text" class="form-control" id="full_name" name="full_name" placeholder="请输入您的昵称" value="<?php echo isset($full_name) ? $full_name : ''; ?>" required>
-                    <?php if (isset($errors['full_name'])): ?>
-                    <span class="help-block text-danger"><?php echo $errors['full_name']; ?></span>
-                    <?php endif; ?>
                 </div>
+                <?php if (isset($errors['full_name'])): ?>
+                <span class="help-block text-danger"><?php echo $errors['full_name']; ?></span>
+                <?php endif; ?>
             </div>
             
             <div class="form-group">
-                <label for="password" class="col-sm-3 control-label">注册密码</label>
-                <div class="col-sm-9">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
-                    <?php if (isset($errors['password'])): ?>
-                    <span class="help-block text-danger"><?php echo $errors['password']; ?></span>
-                    <?php endif; ?>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="请输入注册密码" required>
                 </div>
+                <?php if (isset($errors['password'])): ?>
+                <span class="help-block text-danger"><?php echo $errors['password']; ?></span>
+                <?php endif; ?>
             </div>
             
             <div class="form-group">
-                <label for="confirm_password" class="col-sm-3 control-label">确认密码</label>
-                <div class="col-sm-9">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="请再次输入密码" required>
-                    <?php if (isset($errors['confirm_password'])): ?>
-                    <span class="help-block text-danger"><?php echo $errors['confirm_password']; ?></span>
-                    <?php endif; ?>
                 </div>
+                <?php if (isset($errors['confirm_password'])): ?>
+                <span class="help-block text-danger"><?php echo $errors['confirm_password']; ?></span>
+                <?php endif; ?>
             </div>
             
             <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit" class="btn btn-primary">确认注册</button>
-                    <a href="." class="btn btn-default">返回首页</a>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                    <input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入验证码" required>
+                    <span class="input-group-addon" style="padding: 0; background: none; border: none;">
+                        <img id="captcha_img" src="?controller=home&action=captcha" alt="验证码" style="height: 40px; cursor: pointer; border: 1px solid #eaeaea; border-radius: 4px;" onclick="refreshCaptcha()">
+                    </span>
                 </div>
+                <?php if (isset($errors['captcha'])): ?>
+                <span class="help-block text-danger"><?php echo $errors['captcha']; ?></span>
+                <?php endif; ?>
+            </div>
+            
+            <div class="form-group" style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn btn-primary btn-lg">确认注册</button>
+                <a href="." class="btn btn-default btn-lg">返回首页</a>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+// 刷新验证码函数
+function refreshCaptcha() {
+    document.getElementById('captcha_img').src = '?controller=home&action=captcha&t=' + new Date().getTime();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // 确保 jQuery 已加载
     if (typeof $ !== 'undefined') {
@@ -95,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var password = $('#password').val();
             var confirmPassword = $('#confirm_password').val();
             var fullName = $('#full_name').val().trim();
+            var captcha = $('#captcha').val().trim();
             var isValid = true;
             
             // 清除之前的错误提示
@@ -141,6 +161,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             }
             
+            // 验证验证码
+            if (captcha === '' && isValid) {
+                errorMessage = '请输入验证码';
+                isValid = false;
+            }
+            
             // 如果验证失败，显示错误信息
             if (!isValid) {
                 layer.msg(errorMessage, {
@@ -167,7 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         domain: domain,
                         full_name: fullName,
                         password: password,
-                        confirm_password: confirmPassword
+                        confirm_password: confirmPassword,
+                        captcha: captcha
                     },
                     dataType: 'json',
                     success: function(response) {

@@ -50,7 +50,8 @@ class BaseController {
             'sitename' => $this->config['sitename'] ?? '邮件服务器插件',
             'webmail' => $this->config['webmail'] ?? '',
             'open_register' => $this->config['openRegister'] ?? false,
-            'open_replace' => $this->config['openReplace'] ?? false
+            'open_replace' => $this->config['openReplace'] ?? false,
+            'footer' => $this->config['footer'] ?? '© ' . date('Y') . ' 邮件服务器插件. 保留所有权利。'
         ]);
         
         // 初始化默认响应类型
