@@ -108,6 +108,14 @@ class ApiController extends BaseController {
             ], 400);
         }
         
+        // 检查域名是否在排除列表中
+        if (isset($this->config['exclude']) && is_array($this->config['exclude']) && in_array($domain, $this->config['exclude'])) {
+            return $this->jsonResponse([
+                'status' => 'error',
+                'message' => '该域名不允许注册'
+            ], 403);
+        }
+        
         // 构建完整邮箱地址
         $email = $username . '@' . $domain;
         
