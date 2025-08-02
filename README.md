@@ -78,7 +78,6 @@ $config['superKey'] =  "12345678";
 ├── config/            # 配置文件目录
 │   └── config.inc.php # 主配置文件
 ├── template/          # 模板文件目录
-│   ├── about.php      # 关于页面模板
 │   ├── home.php       # 首页模板
 │   ├── layout.php     # 布局模板
 │   ├── register.php   # 注册页面模板

@@ -45,13 +45,10 @@
             <div class="content-wrapper">
                 <div class="logo-container">
                     <img src="assets/images/logo.svg" alt="Logo">
-                    <h2 class="site-title"><?php echo isset($sitename) ? $sitename : 'Anonymous Online Webmail'; ?></h2>
                 </div>
                 <div class="col-md-8">
                     <?php echo $content; ?>
                 </div>
-    
-                <!-- 底部导航已移除 -->
             </div>
         </div>
     </main>

@@ -172,6 +172,22 @@ select.form-control {
     font-weight: 400;
 }
 
+/* 响应式按钮样式 */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .action-buttons .btn {
+        margin: 5px 0;
+        width: 100%;
+    }
+}
+
 .btn-lg {
     padding: 10px 20px;
     font-size: 16px;

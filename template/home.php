@@ -1,4 +1,8 @@
-<div class="action-buttons" style="text-align: center; margin-top: 20px;">
+<div style="text-align: center; margin-bottom: 15px;">
+    <h2 class="site-title"><?php echo isset($sitename) ? $sitename : 'Anonymous Online Webmail'; ?></h2>
+</div>
+
+<div class="action-buttons">
     <?php if (isset($webmail) && !empty($webmail)): ?>
     <a href="<?php echo $webmail; ?>" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-log-in"></span> 登录邮箱</a>
     <?php endif; ?>

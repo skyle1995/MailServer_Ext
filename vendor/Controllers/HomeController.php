@@ -181,22 +181,4 @@ class HomeController extends BaseController {
             'domains' => $domains
         ]);
     }
-    
-    /**
-     * 关于页面方法
-     */
-    public function aboutAction() {
-        // 设置页面标题
-        $this->template->assign([
-            'title' => '关于我们 - ' . ($this->config['sitename'] ?? '邮件服务器插件')
-        ]);
-        
-        // 渲染合并后的关于和联系页面模板并输出
-        $this->display('about', [
-            'tips' => $this->config['about']['tips'] ?? '这是一个简单的邮件服务器管理插件，提供全面的邮件服务功能。',
-            'email' => $this->config['about']['email'] ?? 'support@example.com',
-            'phone' => $this->config['about']['phone'] ?? '123-456-7890',
-            'address' => $this->config['about']['address'] ?? '北京市海淀区中关村科技园'
-        ]);
-    }
 }
