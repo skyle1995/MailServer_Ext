@@ -155,8 +155,7 @@ class ApiController extends BaseController {
                 'status' => 'success',
                 'message' => $successMsg,
                 'data' => [
-                    'email' => $email,
-                    'webmail' => isset($this->config['webmail']) && !empty($this->config['webmail']) ? $this->config['webmail'] : ''
+                    'email' => $email
                 ]
             ]);
         } else {

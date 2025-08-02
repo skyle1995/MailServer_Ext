@@ -2,8 +2,6 @@
     <h2><?php echo isset($sitename) ? $sitename : '邮件服务器插件'; ?></h2>
     <p class="lead">宝塔邮件服务器扩展插件，提供开放注册邮箱和修改密码功能。</p>
 </div>
-
-
 <div class="row">
     <div class="col-md-8">
         <div class="panel panel-default">

@@ -28,7 +28,7 @@ class HomeController extends BaseController {
     /**
      * 获取可用域名列表
      * 
-     * 从宝塔API获取可用的邮箱域名列表
+     * 从宝塔API获取可用的邮箱域名列表，并排除配置中指定的域名
      * 
      * @return array 域名列表：{"data":["example.com","example1.com","example2.com","example3.com","example4.com"]}
      */
@@ -43,8 +43,20 @@ class HomeController extends BaseController {
         
         // 处理API响应
         if ($response && isset($response['status']) && $response['status'] && isset($response['data'])) {
-            // 直接返回域名列表数组
-            return $response['data'];
+            $domains = $response['data'];
+            
+            // 检查是否有需要排除的域名
+            if (isset($this->config['exclude']) && is_array($this->config['exclude']) && !empty($this->config['exclude'])) {
+                // 过滤掉需要排除的域名
+                $domains = array_filter($domains, function($domain) {
+                    return !in_array($domain, $this->config['exclude']);
+                });
+                
+                // 重新索引数组
+                $domains = array_values($domains);
+            }
+            
+            return $domains;
         }
         
         // 如果API请求失败，返回空数组

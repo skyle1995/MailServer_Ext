@@ -179,27 +179,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             $('#replaceForm')[0].reset();
                             
                             // 使用弹出层显示成功信息
-                            layer.open({
-                                title: '修改成功',
-                                content: '<div style="text-align:center;padding:20px;">' 
+                            layer.alert('<div style="text-align:center;padding:20px;">'
                                     + '<p style="font-size:20px;margin-bottom:10px;color:green;">修改密码成功！</p>'
                                     + '<p>您的邮箱地址是：<strong>' + response.data.email + '</strong></p>'
                                     + '<p>您现在可以使用新密码登录邮箱系统。</p>'
-                                    + '</div>',
-                                btn: ['前往登录', '返回首页'],
+                                    + '</div>', {
+                                title: '修改成功',
+                                btn: ['关闭'],
                                 area: ['400px', 'auto'],
                                 shade: 0.6,
-                                shadeClose: false,
-                                yes: function(index, layero) {
-                                    // 点击前往登录按钮，跳转到登录页面
-                                    window.open(response.data.webmail, '_blank');
-                                    layer.close(index);
-                                },
-                                btn2: function(index, layero) {
-                                    // 点击返回首页按钮
-                                    window.location.href = '.';
-                                    layer.close(index);
-                                }
+                                shadeClose: false
                             });
                         } else {
                             // 修改失败，使用layer提示框显示错误信息

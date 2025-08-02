@@ -12,6 +12,7 @@ $config['sitename'] = "Anonymous Online Webmail";
 $config['panel'] = "https://127.0.0.1:8888";
 // Api接口秘钥
 $config['apikey'] = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
 // 邮箱Webmail登录地址(注意：留空则不显示前往登录按钮)
 $config['webmail'] = "https://127.0.0.1";
 // 注册开关，类型：布尔型（true 开启 false 关闭）
@@ -34,3 +35,10 @@ $config['about']['tips'] = '这是一个简单的邮件服务器管理扩展插�
 $config['about']['email'] = 'support@example.com';
 $config['about']['phone'] = '123-456-7890';
 $config['about']['address'] = '北京市海淀区中关村科技园';
+
+// 如果有需要隐藏的域名，使用这个过滤表
+$config['exclude'] = [
+    'example.com',
+    'example1.com',
+    'example2.com',
+];
