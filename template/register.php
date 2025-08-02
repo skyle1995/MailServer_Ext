@@ -5,6 +5,7 @@
     <div class="panel-body">
         <div id="server-messages"></div>
         <form id="registerForm">
+            <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -20,15 +21,10 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
                     <select class="form-control" id="domain" name="domain" required>
                         <option value="">请选择邮箱后缀</option>
-                        <?php if (isset($domains) && is_array($domains)): ?>
-                            <?php foreach ($domains as $domain): ?>
-                            <option value="<?php echo $domain; ?>" <?php echo (isset($selected_domain) && $selected_domain == $domain) ? 'selected' : ''; ?>>
-                                <?php echo $domain; ?>
-                            </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                        <!-- 域名列表将通过AJAX动态加载 -->
                     </select>
                 </div>
+                <!-- 使用layer.alert替代了原来的错误提示 -->
             </div>
             
             <div class="form-group">
@@ -91,6 +87,54 @@ function refreshCaptcha() {
 document.addEventListener('DOMContentLoaded', function() {
     // 确保 jQuery 已加载
     if (typeof $ !== 'undefined') {
+        // 加载域名列表
+        function loadDomains() {
+            // 使用layer.msg显示加载提示，设置黑色透明背景并禁止操作
+            var loadIndex = layer.msg('加载中', {
+                icon: 16,
+                shade: [0.3, '#000'], // 0.3透明度的黑色背景
+                shadeClose: false // 禁止点击遮罩关闭
+            });
+            
+            $.ajax({
+                url: '?controller=api&action=domains',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    // 关闭加载层
+                    layer.close(loadIndex);
+                    
+                    if (response.status === 'success' && response.data && response.data.length > 0) {
+                        var domainSelect = $('#domain');
+                        domainSelect.find('option:not(:first)').remove();
+                        
+                        $.each(response.data, function(index, domain) {
+                            domainSelect.append($('<option></option>').val(domain).text(domain));
+                        });
+                    } else {
+                        layer.alert(response.message || '无法获取可用后缀列表，请刷新页面重试。', {
+                            icon: 2,
+                            title: '错误提示',
+                            btn: ['确定']
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // 关闭加载层
+                    layer.close(loadIndex);
+                    layer.alert('加载域名列表失败，请刷新页面重试。', {
+                        icon: 2,
+                        title: '错误提示',
+                        btn: ['确定']
+                    });
+                    console.error('加载域名列表失败:', error);
+                }
+            });
+        }
+        
+        // 页面加载时获取域名列表
+        loadDomains();
+        
         // 检查是否禁用注册功能
         <?php if (isset($disabled) && $disabled): ?>
         layer.alert('<?php echo isset($disabled_message) ? $disabled_message : "注册功能当前未开放"; ?>', {
@@ -128,6 +172,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             } else if (username.length < 3) {
                 errorMessage = '账号名长度不能少于3个字符';
+                isValid = false;
+            } else if (!/^[a-z][a-z0-9]*$/.test(username)) {
+                errorMessage = '用户名必须以小写字母开头，且只能包含小写字母和数字';
                 isValid = false;
             }
             
@@ -179,9 +226,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             if (isValid) {
-                // 显示加载层
-                var loadingIndex = layer.load(1, {
-                    shade: [0.3, '#fff'] // 0.3透明度的白色背景
+                // 显示加载层，使用layer.msg，设置黑色透明背景并禁止操作
+                var loadingIndex = layer.msg('加载中', {
+                    icon: 16,
+                    shade: [0.3, '#000'], // 0.3透明度的黑色背景
+                    shadeClose: false // 禁止点击遮罩关闭
                 });
                 
                 // 通过AJAX提交表单
@@ -194,7 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         full_name: fullName,
                         password: password,
                         confirm_password: confirmPassword,
-                        captcha: captcha
+                        captcha: captcha,
+                        csrf_token: $('input[name="csrf_token"]').val()
                     },
                     dataType: 'json',
                     success: function(response) {

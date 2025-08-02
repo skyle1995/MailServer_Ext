@@ -5,6 +5,16 @@
  * 本文件作为应用程序的入口点，负责初始化环境、路由请求到相应的控制器和方法
  */
 
+// 检查PHP版本是否支持session_status函数（PHP 5.4.0及以上版本支持）
+if (!function_exists('session_status')) {
+    die('当前PHP版本不支持session_status函数，请升级PHP到5.4.0或更高版本。');
+}
+
+// 启动会话（确保在所有代码执行前启动SESSION）
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // 引入自动加载器
 require_once __DIR__ . '/vendor/autoload.php';
 

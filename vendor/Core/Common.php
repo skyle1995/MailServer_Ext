@@ -54,10 +54,7 @@ class Common {
      * @return string CSRF令牌
      */
     public static function csrf_token() {
-        // 确保会话已启动
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // 会话已在入口文件中启动
         
         // 如果会话中不存在CSRF令牌，则生成一个新的
         if (empty($_SESSION['csrf_token'])) {
@@ -76,10 +73,7 @@ class Common {
      * @return bool 如果令牌有效则返回true，否则返回false
      */
     public static function verify_csrf_token($token) {
-        // 确保会话已启动
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // 会话已在入口文件中启动
         
         // 如果会话中不存在CSRF令牌，则验证失败
         if (empty($_SESSION['csrf_token'])) {

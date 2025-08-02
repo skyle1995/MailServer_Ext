@@ -71,6 +71,14 @@ class InstallController extends BaseController {
             return;
         }
         
+        // 验证CSRF令牌
+        $token = Request::post('csrf_token');
+        if (!verify_csrf_token($token)) {
+            $this->template->assign('error', 'CSRF令牌验证失败，请刷新页面重试');
+            $this->display('install');
+            return;
+        }
+        
         // 获取表单提交的配置信息
         $sitename = Request::post('sitename', $this->config['sitename']);
         $panel = Request::post('panel', $this->config['panel']);

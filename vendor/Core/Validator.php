@@ -174,6 +174,18 @@ class Validator {
      * @param mixed $param 规则参数
      * @return string 默认错误消息
      */
+    /**
+     * 验证用户名格式（小写字母和数字，字母开头）
+     * 
+     * @param string $value 需要验证的值
+     * @param mixed $param 规则参数（此规则不需要参数）
+     * @return bool 验证通过返回true，否则返回false
+     */
+    protected function validateUsername($value, $param) {
+        // 验证用户名是否以小写字母开头，且只包含小写字母和数字
+        return preg_match('/^[a-z][a-z0-9]*$/', $value) === 1;
+    }
+    
     protected function getDefaultErrorMessage($rule, $param) {
         $messages = [
             'required' => '此字段不能为空',
@@ -181,7 +193,8 @@ class Validator {
             'max' => '此字段长度不能大于' . $param,
             'same' => '此字段必须与指定值相同',
             'email' => '请输入有效的电子邮件地址',
-            'numeric' => '此字段必须是数字'
+            'numeric' => '此字段必须是数字',
+            'username' => '用户名必须以小写字母开头，且只能包含小写字母和数字'
         ];
         
         return isset($messages[$rule]) ? $messages[$rule] : '验证失败';

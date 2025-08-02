@@ -9,10 +9,7 @@ use Core\Validator;
 use Core\Common;
 use Core\Network;
 
-// 确保会话已启动
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// 会话已在入口文件中启动
 
 /**
  * ApiController类 - 处理API请求
@@ -89,6 +86,15 @@ class ApiController extends BaseController {
             ], 405);
         }
         
+        // 验证CSRF令牌
+        $token = $this->getPostParam('csrf_token');
+        if (!verify_csrf_token($token)) {
+            return $this->jsonResponse([
+                'status' => 'error',
+                'message' => 'CSRF令牌验证失败，请刷新页面重试'
+            ], 400);
+        }
+        
         // 获取表单数据
         $username = $this->getPostParam('username');
         $domain = $this->getPostParam('domain');
@@ -100,7 +106,7 @@ class ApiController extends BaseController {
         // 验证表单数据
         $validator = new Validator();
         $minNameLength = isset($this->config['nameLength']) ? $this->config['nameLength'] : 3;
-        $validator->validate($username, 'required|min:' . $minNameLength, '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符');
+        $validator->validate($username, 'required|min:' . $minNameLength . '|username', '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符|用户名必须以小写字母开头，且只能包含小写字母和数字');
         $validator->validate($domain, 'required', '后缀不能为空');
         $validator->validate($fullName, 'required', '昵称不能为空');
         $validator->validate($password, 'required|min:8', '密码不能为空|密码长度不能少于8个字符');
@@ -155,6 +161,8 @@ class ApiController extends BaseController {
         // 发送API请求
         $apiResponse = Network::curlSenior($apiUrl, 'POST', http_build_query($p_data));
         
+        return $this->textResponse($apiResponse);
+
         // 解析响应
         $response = json_decode($apiResponse, true);
         if (!$response) {
@@ -221,6 +229,15 @@ class ApiController extends BaseController {
             ], 405);
         }
         
+        // 验证CSRF令牌
+        $token = $this->getPostParam('csrf_token');
+        if (!verify_csrf_token($token)) {
+            return $this->jsonResponse([
+                'status' => 'error',
+                'message' => 'CSRF令牌验证失败，请刷新页面重试'
+            ], 400);
+        }
+        
         // 获取表单数据
         $username = $this->getPostParam('username');
         $domain = $this->getPostParam('domain');
@@ -232,7 +249,7 @@ class ApiController extends BaseController {
         // 验证表单数据
         $validator = new Validator();
         $minNameLength = isset($this->config['nameLength']) ? $this->config['nameLength'] : 3;
-        $validator->validate($username, 'required|min:' . $minNameLength, '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符');
+        $validator->validate($username, 'required|min:' . $minNameLength . '|username', '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符|用户名必须以小写字母开头，且只能包含小写字母和数字');
         $validator->validate($domain, 'required', '后缀不能为空');
         $validator->validate($password, 'required', '当前密码不能为空');
         $validator->validate($newPassword, 'required|min:8', '新密码不能为空|新密码长度不能少于8个字符');
@@ -315,5 +332,46 @@ class ApiController extends BaseController {
                 'message' => $errorMsg
             ], 500);
         }
+    }
+    
+    /**
+     * 获取可用域名列表API
+     * 返回可用的邮箱域名列表，排除配置中指定的域名
+     */
+    public function domainsAction() {
+        // 调用宝塔API获取域名列表
+        $url = $this->config["panel"] . '/plugin?action=a&name=mail_ext&s=get_domain';
+        $p_data = Common::getKeyData($this->config["apikey"]);
+        
+        // 发送API请求
+        $result = Network::curlSenior($url, 'POST', http_build_query($p_data));
+        $response = json_decode($result, true);
+        
+        // 处理API响应
+        if ($response && isset($response['status']) && $response['status'] && isset($response['data'])) {
+            $domains = $response['data'];
+            
+            // 检查是否有需要排除的域名
+            if (isset($this->config['exclude']) && is_array($this->config['exclude']) && !empty($this->config['exclude'])) {
+                // 过滤掉需要排除的域名
+                $domains = array_filter($domains, function($domain) {
+                    return !in_array($domain, $this->config['exclude']);
+                });
+                
+                // 重新索引数组
+                $domains = array_values($domains);
+            }
+            
+            return $this->jsonResponse([
+                'status' => 'success',
+                'data' => $domains
+            ]);
+        }
+        
+        // 如果API请求失败，返回错误信息
+        return $this->jsonResponse([
+            'status' => 'error',
+            'message' => '无法获取可用后缀列表，请稍后再试或联系管理员。'
+        ], 500);
     }
 }

@@ -9,12 +9,14 @@
         </div>
         <?php else: ?>
         <form method="post" action="?controller=install&action=save">
+            <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
             <div class="form-group">
                 <label for="sitename">站点名称</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
                     <input type="text" class="form-control" id="sitename" name="sitename" placeholder="Anonymous Online Webmail" value="" required>
                 </div>
+                <p class="help-block">请输入您的站点名称，例如：Anonymous Online Webmail</p>
             </div>
             
             <div class="form-group">
@@ -23,7 +25,7 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
                     <input type="text" class="form-control" id="panel" name="panel" placeholder="https://127.0.0.1:8888" value="" required>
                 </div>
-                <p class="help-block">请输入您的宝塔面板访问地址</p>
+                <p class="help-block">请输入您的宝塔面板访问地址，例如：https://127.0.0.1:8888</p>
             </div>
             
             <div class="form-group">

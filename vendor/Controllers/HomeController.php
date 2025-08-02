@@ -102,22 +102,8 @@ class HomeController extends BaseController {
             'title' => '注册邮箱 - ' . ($this->config['sitename'] ?? '邮件服务器插件')
         ]);
         
-        // 获取域名列表
-        $domains = $this->getDomains();
-        
-        // 如果没有可用域名，显示错误
-        if (empty($domains)) {
-            $this->display('register', [
-                'error_message' => '无法获取可用后缀列表，请稍后再试或联系管理员。',
-                'domains' => []
-            ]);
-            return;
-        }
-        
-        // 显示注册表单
-        $this->display('register', [
-            'domains' => $domains
-        ]);
+        // 显示注册表单（域名列表通过AJAX获取）
+        $this->display('register');
     }
     
     /**
@@ -133,7 +119,7 @@ class HomeController extends BaseController {
         $validateCode->doimg();
         
         // 获取验证码并保存到会话中
-        $_SESSION['captcha_code'] = $validateCode->getCode();
+        $_SESSION['captcha'] = $validateCode->getCode();
         
         // 直接输出图片，不需要返回
         exit;
@@ -164,21 +150,7 @@ class HomeController extends BaseController {
             'title' => '修改密码 - ' . ($this->config['sitename'] ?? '邮件服务器插件')
         ]);
         
-        // 获取域名列表
-        $domains = $this->getDomains();
-        
-        // 如果没有可用域名，显示错误
-        if (empty($domains)) {
-            $this->display('replace', [
-                'error_message' => '无法获取可用后缀列表，请稍后再试或联系管理员。',
-                'domains' => []
-            ]);
-            return;
-        }
-        
-        // 显示修改密码表单
-        $this->display('replace', [
-            'domains' => $domains
-        ]);
+        // 显示修改密码表单（域名列表通过AJAX获取）
+        $this->display('replace');
     }
 }
