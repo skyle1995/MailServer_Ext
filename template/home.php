@@ -27,7 +27,7 @@
             <div class="panel-body">
                 <div class="action-buttons">
                     <?php if (isset($webmail) && !empty($webmail)): ?>
-                    <a href="<?php echo $webmail; ?>" target="_blank" class="btn btn-success btn-block"><span class="glyphicon glyphicon-log-in"></span> 前往登录</a>
+                    <a href="<?php echo $webmail; ?>" class="btn btn-success btn-block"><span class="glyphicon glyphicon-log-in"></span> 前往登录</a>
                     <?php endif; ?>
                     <a href="?controller=home&action=register" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-user"></span> 立即注册</a>
                     <a href="?controller=home&action=replace" class="btn btn-default btn-block"><span class="glyphicon glyphicon-lock"></span> 修改密码</a>

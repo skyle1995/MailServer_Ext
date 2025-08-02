@@ -36,7 +36,7 @@ $config['about']['email'] = 'support@example.com';
 $config['about']['phone'] = '123-456-7890';
 $config['about']['address'] = '北京市海淀区中关村科技园';
 
-// 如果有需要隐藏的域名，使用这个过滤表
+// 域名过滤表（隐藏/禁用）
 $config['exclude'] = [
     'example.com',
     'example1.com',
