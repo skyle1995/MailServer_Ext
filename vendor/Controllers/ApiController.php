@@ -160,8 +160,6 @@ class ApiController extends BaseController {
         
         // 发送API请求
         $apiResponse = Network::curlSenior($apiUrl, 'POST', http_build_query($p_data));
-        
-        return $this->textResponse($apiResponse);
 
         // 解析响应
         $response = json_decode($apiResponse, true);
