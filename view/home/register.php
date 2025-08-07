@@ -72,7 +72,7 @@
             
             <div class="form-group" style="text-align: center; margin-top: 20px;">
                 <button type="submit" class="btn btn-primary btn-lg">确认注册</button>
-                <a href="." class="btn btn-default btn-lg" data-ajax="true">返回首页</a>
+                <a href="." class="btn btn-default btn-lg">返回首页</a>
             </div>
         </form>
     </div>
@@ -81,10 +81,7 @@
 <script>
 // 刷新验证码函数
 function refreshCaptcha() {
-    const captchaImg = document.getElementById('captcha_img');
-    if (captchaImg) {
-        captchaImg.src = '?controller=home&action=captcha&t=' + new Date().getTime();
-    }
+    document.getElementById('captcha_img').src = '?controller=home&action=captcha&t=' + new Date().getTime();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
