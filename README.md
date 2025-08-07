@@ -22,7 +22,7 @@
 
 1. 先安装提供的宝塔邮局扩展插件
 2. 将项目文件上传到Web服务器目录
-3. 修改 `config/config.inc.php` 文件中的配置参数
+3. 修改 `config/default.inc.php` 文件中的配置参数
 4. 确保Web服务器有权限访问项目文件
 5. 通过浏览器访问项目URL
 
@@ -55,7 +55,7 @@ $config['superKey'] =  "";
 // 域名过滤表（隐藏/禁用）
 $config['exclude'] = [];
 // 底部版权信息
-$config['footer'] = "© 2025 Anonymous Online Webmail. 保留所有权利。";
+$config['footer'] = "© " . date('Y') . " Anonymous Online Webmail. 保留所有权利。";
 ```
 
 ## 使用说明
@@ -86,12 +86,16 @@ $config['footer'] = "© 2025 Anonymous Online Webmail. 保留所有权利。";
 ```
 ├── assets/            # 静态资源文件
 │   ├── bootstrap/     # Bootstrap框架文件
+│   │   ├── css/       # Bootstrap CSS文件
+│   │   ├── fonts/     # Bootstrap 字体文件
+│   │   └── js/        # Bootstrap JavaScript文件
 │   ├── css/           # 自定义CSS样式
+│   ├── font/          # 字体资源
 │   ├── images/        # 图片资源
 │   ├── js/            # JavaScript脚本
 │   └── layer/         # Layer弹出层组件
 ├── config/            # 配置文件目录
-│   └── config.inc.php # 主配置文件
+│   └── default.inc.php # 主配置文件
 ├── view/              # 视图文件目录
 │   ├── home/          # 首页相关视图
 │   │   ├── index.php  # 首页视图
@@ -99,13 +103,25 @@ $config['footer'] = "© 2025 Anonymous Online Webmail. 保留所有权利。";
 │   │   ├── register.php # 注册页面视图
 │   │   └── replace.php  # 修改密码页面视图
 │   └── install/       # 安装相关视图
-│       ├── index.php  # 安装页面视图
-│       └── layout.php # 安装页面布局
+│       └── index.php  # 安装页面视图
 ├── vendor/            # 核心代码目录
-│   ├── Controllers/   # 控制器类
+│   ├── Captcha/       # 验证码相关类
+│   ├── Controller/    # 控制器类
+│   │   ├── ApiController.php     # API控制器
+│   │   ├── BaseController.php    # 基础控制器
+│   │   ├── HomeController.php    # 首页控制器
+│   │   └── InstallController.php # 安装控制器
 │   ├── Core/          # 核心功能类
+│   │   ├── Common.php  # 公共函数
+│   │   ├── Network.php # 网络相关
+│   │   ├── Request.php # 请求处理
+│   │   └── Validator.php # 数据验证
 │   ├── View/          # 视图相关类
+│   │   ├── Helper.php  # 视图助手
+│   │   └── Template.php # 模板引擎
 │   └── autoload.php   # 自动加载文件
+├── .gitignore         # Git忽略文件
+├── LICENSE            # 许可证文件
 └── index.php          # 入口文件
 ```
 
