@@ -87,11 +87,8 @@ class Template {
         // 合并变量
         $vars = array_merge($this->vars, $vars);
         
-        // 提取变量到当前作用域
-        extract($vars);
-        
-        // 启动输出缓冲
-        ob_start();
+        // 检查是否是内部调用，用于避免布局嵌套
+        $isInternalCall = isset($vars['_is_internal_call']) && $vars['_is_internal_call'] === true;
         
         // 获取模板文件路径
         // 检查是否包含目录分隔符，如果包含则按指定路径查找模板
@@ -108,16 +105,8 @@ class Template {
             throw new \Exception("Template file not found: {$templateFile}");
         }
         
-        include $templateFile;
-        
-        // 获取渲染内容
-        $content = ob_get_clean();
-        
-        // 如果设置了布局模板，则尝试渲染布局
-        if ($this->layout !== null) {
-            // 将内容变量传递给布局模板
-            $layoutVars = array_merge($vars, ['content' => $content]);
-            
+        // 如果设置了布局模板且不是内部调用，则使用布局
+        if ($this->layout !== null && !$isInternalCall) {
             // 检查是否是子目录模板，如果是则尝试使用子目录中的布局文件
             $layoutFile = null;
             if (!empty($templateDir)) {
@@ -128,19 +117,45 @@ class Template {
                 }
             }
             
-            // 如果找到了布局文件，则渲染布局
+            // 如果找到了布局文件，则先渲染内容，再渲染布局
             if ($layoutFile !== null) {
-                // 提取变量到当前作用域
-                extract($layoutVars);
+                // 标记为内部调用，避免布局嵌套
+                $contentVars = array_merge($vars, ['_is_internal_call' => true]);
                 
-                // 启动新的输出缓冲
-                ob_start();
-                include $layoutFile;
-                $content = ob_get_clean();
+                // 渲染内容模板
+                $content = $this->renderTemplate($templateFile, $contentVars);
+                
+                // 将内容变量传递给布局模板
+                $layoutVars = array_merge($vars, ['content' => $content]);
+                
+                // 渲染布局模板
+                return $this->renderTemplate($layoutFile, $layoutVars);
             }
         }
         
-        return $content;
+        // 如果没有布局或者是内部调用，直接渲染模板
+        return $this->renderTemplate($templateFile, $vars);
+    }
+    
+    /**
+     * 渲染单个模板文件
+     * 
+     * @param string $templateFile 模板文件路径
+     * @param array $vars 模板变量
+     * @return string 渲染后的内容
+     */
+    private function renderTemplate($templateFile, array $vars = []) {
+        // 提取变量到当前作用域
+        extract($vars);
+        
+        // 启动输出缓冲
+        ob_start();
+        
+        // 包含模板文件
+        include $templateFile;
+        
+        // 获取渲染内容
+        return ob_get_clean();
     }
     
     /**
