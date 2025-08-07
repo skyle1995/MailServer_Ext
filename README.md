@@ -92,11 +92,15 @@ $config['footer'] = "© 2025 Anonymous Online Webmail. 保留所有权利。";
 │   └── layer/         # Layer弹出层组件
 ├── config/            # 配置文件目录
 │   └── config.inc.php # 主配置文件
-├── template/          # 模板文件目录
-│   ├── home.php       # 首页模板
-│   ├── layout.php     # 布局模板
-│   ├── register.php   # 注册页面模板
-│   └── replace.php    # 修改密码页面模板
+├── view/              # 视图文件目录
+│   ├── home/          # 首页相关视图
+│   │   ├── index.php  # 首页视图
+│   │   ├── layout.php # 首页布局
+│   │   ├── register.php # 注册页面视图
+│   │   └── replace.php  # 修改密码页面视图
+│   └── install/       # 安装相关视图
+│       ├── index.php  # 安装页面视图
+│       └── layout.php # 安装页面布局
 ├── vendor/            # 核心代码目录
 │   ├── Controllers/   # 控制器类
 │   ├── Core/          # 核心功能类

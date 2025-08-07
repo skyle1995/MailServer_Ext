@@ -36,7 +36,7 @@ class Template {
     public function __construct($templatePath = null) {
         // 如果未指定模板路径，则使用默认路径
         if ($templatePath === null) {
-            $this->templatePath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'template';
+            $this->templatePath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'view';
         } else {
             $this->templatePath = rtrim($templatePath, '/\\');
         }
@@ -93,8 +93,17 @@ class Template {
         // 启动输出缓冲
         ob_start();
         
-        // 包含模板文件
-        $templateFile = $this->templatePath . DIRECTORY_SEPARATOR . $template . '.php';
+        // 获取模板文件路径
+        // 检查是否包含目录分隔符，如果包含则按指定路径查找模板
+        if (strpos($template, '/') !== false || strpos($template, '\\') !== false) {
+            $templateParts = explode(DIRECTORY_SEPARATOR, str_replace('/', DIRECTORY_SEPARATOR, $template));
+            $templateFile = $this->templatePath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $templateParts) . '.php';
+            $templateDir = $templateParts[0]; // 获取第一级目录
+        } else {
+            $templateFile = $this->templatePath . DIRECTORY_SEPARATOR . $template . '.php';
+            $templateDir = ''; // 没有目录
+        }
+        
         if (!file_exists($templateFile)) {
             throw new \Exception("Template file not found: {$templateFile}");
         }
@@ -104,24 +113,31 @@ class Template {
         // 获取渲染内容
         $content = ob_get_clean();
         
-        // 如果设置了布局模板，则渲染布局
+        // 如果设置了布局模板，则尝试渲染布局
         if ($this->layout !== null) {
             // 将内容变量传递给布局模板
             $layoutVars = array_merge($vars, ['content' => $content]);
             
-            // 渲染布局模板
-            $layoutFile = $this->templatePath . DIRECTORY_SEPARATOR . $this->layout . '.php';
-            if (!file_exists($layoutFile)) {
-                throw new \Exception("Layout template file not found: {$layoutFile}");
+            // 检查是否是子目录模板，如果是则尝试使用子目录中的布局文件
+            $layoutFile = null;
+            if (!empty($templateDir)) {
+                // 尝试使用子目录中的布局文件
+                $subDirLayoutFile = $this->templatePath . DIRECTORY_SEPARATOR . $templateDir . DIRECTORY_SEPARATOR . $this->layout . '.php';
+                if (file_exists($subDirLayoutFile)) {
+                    $layoutFile = $subDirLayoutFile;
+                }
             }
             
-            // 提取变量到当前作用域
-            extract($layoutVars);
-            
-            // 启动新的输出缓冲
-            ob_start();
-            include $layoutFile;
-            $content = ob_get_clean();
+            // 如果找到了布局文件，则渲染布局
+            if ($layoutFile !== null) {
+                // 提取变量到当前作用域
+                extract($layoutVars);
+                
+                // 启动新的输出缓冲
+                ob_start();
+                include $layoutFile;
+                $content = ob_get_clean();
+            }
         }
         
         return $content;

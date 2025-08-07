@@ -74,7 +74,7 @@ class HomeController extends BaseController {
         ]);
         
         // 渲染首页模板并输出
-        $this->display('home');
+        $this->display('home/index');
     }
     
     /**
@@ -93,7 +93,7 @@ class HomeController extends BaseController {
             ]);
             
             // 显示注册表单（禁用状态）
-            $this->display('register');
+            $this->display('home/register');
             return;
         }
         
@@ -103,7 +103,7 @@ class HomeController extends BaseController {
         ]);
         
         // 显示注册表单（域名列表通过AJAX获取）
-        $this->display('register');
+        $this->display('home/register');
     }
     
     /**
@@ -141,7 +141,7 @@ class HomeController extends BaseController {
             ]);
             
             // 显示修改密码表单（禁用状态）
-            $this->display('replace');
+            $this->display('home/replace');
             return;
         }
         
@@ -151,6 +151,6 @@ class HomeController extends BaseController {
         ]);
         
         // 显示修改密码表单（域名列表通过AJAX获取）
-        $this->display('replace');
+        $this->display('home/replace');
     }
 }

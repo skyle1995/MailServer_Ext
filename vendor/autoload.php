@@ -68,7 +68,7 @@ function preloadCoreFiles() {
     $coreFiles = [
         $vendorDir . '/Core/Request.php',
         $vendorDir . '/View/Template.php',
-        $vendorDir . '/Controllers/BaseController.php'
+        $vendorDir . '/Controller/BaseController.php'
     ];
     
     // 加载核心类文件

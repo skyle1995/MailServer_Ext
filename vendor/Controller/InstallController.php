@@ -47,13 +47,13 @@ class InstallController extends BaseController {
         
         // 如果配置文件已存在，显示错误信息
         if (file_exists($configFile)) {
-            $this->display('install');
+            $this->display('install/index');
             return;
         }
         
         // 将默认配置传递给模板
         $this->template->assign('config', $this->config);
-        $this->display('install');
+        $this->display('install/index');
     }
     
     /**
@@ -67,7 +67,7 @@ class InstallController extends BaseController {
         // 如果配置文件已存在，显示错误信息
         if (file_exists($configFile)) {
             $this->template->assign('error', '系统已经安装，如需重新安装，请先删除 config/config.inc.php 文件');
-            $this->display('install');
+            $this->display('install/index');
             return;
         }
         
@@ -75,7 +75,7 @@ class InstallController extends BaseController {
         $token = Request::post('csrf_token');
         if (!verify_csrf_token($token)) {
             $this->template->assign('error', 'CSRF令牌验证失败，请刷新页面重试');
-            $this->display('install');
+            $this->display('install/index');
             return;
         }
         
@@ -151,7 +151,7 @@ class InstallController extends BaseController {
             // 安装失败，显示错误信息
             $this->template->assign('error', '配置文件写入失败，请检查目录权限');
             $this->template->assign('config', $this->config);
-            $this->display('install');
+            $this->display('install/index');
         }
     }
 }
