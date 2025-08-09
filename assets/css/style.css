@@ -134,7 +134,7 @@ footer.footer {
 }
 
 .panel-body {
-    padding: 20px;
+    padding: 20px 20px 5px 20px;
 }
 
 /* 表单样式 */
@@ -180,7 +180,6 @@ select.form-control {
 /* 按钮样式 */
 .btn {
     border-radius: 4px;
-    margin: 0 5px;
     border: none;
     font-weight: 400;
 }
@@ -193,6 +192,8 @@ select.form-control {
     gap: 10px;
     margin-top: 20px;
 }
+
+/* 首页按钮保持原样式 */
 
 @media (max-width: 768px) {
     .action-buttons .btn {

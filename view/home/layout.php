@@ -8,9 +8,9 @@
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
     <!-- FontAwesome 图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -35,13 +35,13 @@
     </footer>
     
     <!-- jQuery (Bootstrap 的依赖) -->
-    <script src="assets/js/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap JavaScript -->
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!-- Layer弹出层 -->
-    <script src="assets/layer/layer/layer.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/layer/3.5.1/layer.js"></script>
     <!-- 粒子效果库 (CDN版本) -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <!-- 自定义脚本 -->
     <script src="assets/js/main.js"></script>
     <!-- 初始化粒子效果 -->

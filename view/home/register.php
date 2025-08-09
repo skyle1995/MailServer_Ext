@@ -71,11 +71,14 @@
             </div>
             
             <div class="form-group" style="text-align: center; margin-top: 20px;">
-                <button type="submit" class="btn btn-primary btn-lg">确认注册</button>
-                <a href="." class="btn btn-default btn-lg">返回首页</a>
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; max-width: 300px;">确认注册</button>
             </div>
         </form>
     </div>
+</div>
+
+<div style="text-align: center; margin-top: 5px;">
+    <a href="." class="btn btn-link" style="display: inline-block; width: 100%; max-width: 300px;"><i class="fas fa-home"></i> 返回首页</a>
 </div>
 
 <script>
