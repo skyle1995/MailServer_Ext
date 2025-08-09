@@ -132,6 +132,14 @@ class Template {
                 }
             }
             
+            // 如果没有找到子目录中的布局文件，则尝试使用全局布局文件
+            if ($layoutFile === null) {
+                $globalLayoutFile = $this->templatePath . DIRECTORY_SEPARATOR . $this->layout . '.php';
+                if (file_exists($globalLayoutFile)) {
+                    $layoutFile = $globalLayoutFile;
+                }
+            }
+            
             // 如果找到了布局文件，则渲染布局
             if ($layoutFile !== null) {
                 // 提取变量到当前作用域

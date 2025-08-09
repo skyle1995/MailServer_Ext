@@ -1,4 +1,5 @@
 config.inc.php
 dist
+apidoc
 .DS_Store
 *.local

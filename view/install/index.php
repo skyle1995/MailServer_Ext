@@ -9,6 +9,8 @@
     <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -35,7 +37,7 @@
                                 <div class="form-group">
                                     <label for="sitename">站点名称</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-globe"></i></span>
                                         <input type="text" class="form-control" id="sitename" name="sitename" placeholder="Anonymous Online Webmail" value="" required>
                                     </div>
                                     <p class="help-block">请输入您的站点名称，例如：Anonymous Online Webmail</p>
@@ -44,7 +46,7 @@
                                 <div class="form-group">
                                     <label for="panel">宝塔面板地址</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-link"></i></span>
                                         <input type="text" class="form-control" id="panel" name="panel" placeholder="https://127.0.0.1:8888" value="" required>
                                     </div>
                                     <p class="help-block">请输入您的宝塔面板访问地址，例如：https://127.0.0.1:8888</p>
@@ -53,7 +55,7 @@
                                 <div class="form-group">
                                     <label for="apikey">API接口密钥</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-key"></i></span>
                                         <input type="text" class="form-control" id="apikey" name="apikey" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="" required>
                                     </div>
                                     <p class="help-block">请在宝塔面板API接口中获取密钥</p>
@@ -62,7 +64,7 @@
                                 <div class="form-group">
                                     <label for="webmail">邮箱Webmail登录地址</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
                                         <input type="text" class="form-control" id="webmail" name="webmail" placeholder="https://127.0.0.1" value="">
                                     </div>
                                     <p class="help-block">请输入您的Webmail访问地址，留空则不显示登录邮箱按钮</p>
@@ -84,7 +86,7 @@
                                 <div class="form-group">
                                     <label for="nameLength">注册名称最低长度</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-text-width"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-text-width"></i></span>
                                         <input type="number" class="form-control" id="nameLength" name="nameLength" value="<?php echo isset($config['nameLength']) ? $config['nameLength'] : '5'; ?>" min="1" required>
                                     </div>
                                 </div>
@@ -94,7 +96,7 @@
                                     <div class="row">
                                         <div class="col-xs-6">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-hdd"></i></span>
+                                                <span class="input-group-addon"><i class="fas fa-hdd"></i></span>
                                                 <input type="number" class="form-control" id="emailQuota" name="emailQuota" value="<?php echo isset($config['emailQuota']) ? $config['emailQuota'] : '5'; ?>" min="1" required>
                                             </div>
                                         </div>
@@ -110,10 +112,10 @@
                                 <div class="form-group">
                                     <label for="superKey">超级密钥</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-lock"></i></span>
                                         <input type="text" class="form-control" id="superKey" name="superKey" value="" required>
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-primary" style="height: 40px;" onclick="generateRandomKey()"><span class="glyphicon glyphicon-random"></span> 随机生成</button>
+                                            <button type="button" class="btn btn-primary" style="height: 40px;" onclick="generateRandomKey()"><i class="fas fa-random"></i> 随机生成</button>
                                         </span>
                                     </div>
                                     <p class="help-block">用于API对接认证，请设置复杂密钥并妥善保管</p>
@@ -121,7 +123,7 @@
                                 <div class="form-group">
                                     <label for="exclude">域名过滤表（每行一个域名）</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-filter"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-filter"></i></span>
                                         <textarea class="form-control" id="exclude" name="exclude" rows="5"></textarea>
                                     </div>
                                     <p class="help-block">这些域名将被隐藏或禁用</p>
@@ -130,7 +132,7 @@
                                 <div class="form-group">
                                     <label for="footer">底部版权信息</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-copyright-mark"></i></span>
+                                        <span class="input-group-addon"><i class="fas fa-copyright"></i></span>
                                         <input type="text" class="form-control" id="footer" name="footer" placeholder="© <?php echo date('Y'); ?> Anonymous Online Webmail. 保留所有权利。" value="">
                                     </div>
                                     <p class="help-block">显示在网站底部的版权信息</p>

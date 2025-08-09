@@ -8,7 +8,7 @@
             <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-user"></i></span>
                     <input type="text" class="form-control" id="username" name="username" placeholder="请输入账号名" value="<?php echo isset($username) ? $username : ''; ?>" required>
                 </div>
                 <?php if (isset($errors['username'])): ?>
@@ -18,7 +18,7 @@
             
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-globe"></i></span>
                     <select class="form-control" id="domain" name="domain" required>
                         <option value="">请选择邮箱后缀</option>
                         <!-- 域名列表将通过AJAX动态加载 -->
@@ -29,7 +29,7 @@
             
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-lock"></i></span>
                     <input type="password" class="form-control" id="password" name="password" placeholder="请输入当前密码" required>
                 </div>
                 <?php if (isset($errors['password'])): ?>
@@ -39,7 +39,7 @@
             
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-key"></i></span>
                     <input type="password" class="form-control" id="new_password" name="new_password" placeholder="请输入新的密码" required>
                 </div>
                 <?php if (isset($errors['new_password'])): ?>
@@ -49,7 +49,7 @@
             
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-check-circle"></i></span>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="请再次输入新密码" required>
                 </div>
                 <?php if (isset($errors['confirm_password'])): ?>
@@ -59,7 +59,7 @@
             
             <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-shield-alt"></i></span>
                     <input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入验证码" required>
                     <span class="input-group-addon" style="padding: 0; background: none; border: none;">
                         <img id="captcha_img" src="?controller=home&action=captcha" alt="验证码" style="height: 40px; cursor: pointer; border: 1px solid #eaeaea; border-radius: 4px;" onclick="refreshCaptcha()">
