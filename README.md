@@ -105,14 +105,6 @@ $config['footer'] = "© " . date('Y') . " Anonymous Online Webmail. 保留所有
 ├── config/            # 配置文件目录
 │   ├── default.inc.php # 默认配置文件
 │   └── config.inc.php  # 安装后生成的自定义配置文件
-├── view/              # 视图文件目录
-│   ├── home/          # 首页相关视图
-│   │   ├── index.php  # 首页视图
-│   │   ├── layout.php # 首页布局
-│   │   ├── register.php # 注册页面视图
-│   │   └── replace.php  # 修改密码页面视图
-│   └── install/       # 安装相关视图
-│       └── index.php  # 安装页面视图
 ├── vendor/            # 核心代码目录
 │   ├── Captcha/       # 验证码相关类
 │   ├── Controller/    # 控制器类
@@ -129,6 +121,14 @@ $config['footer'] = "© " . date('Y') . " Anonymous Online Webmail. 保留所有
 │   │   ├── Helper.php  # 视图助手
 │   │   └── Template.php # 模板引擎
 │   └── autoload.php   # 自动加载文件
+├── view/              # 视图文件目录
+│   ├── home/          # 首页相关视图
+│   │   ├── index.php  # 首页视图
+│   │   ├── layout.php # 首页布局
+│   │   ├── register.php # 注册页面视图
+│   │   └── replace.php  # 修改密码页面视图
+│   └── install/       # 安装相关视图
+│       └── index.php  # 安装页面视图
 ├── .gitignore         # Git忽略文件
 ├── LICENSE            # 许可证文件
 └── index.php          # 入口文件
