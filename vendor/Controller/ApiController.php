@@ -98,7 +98,8 @@ class ApiController extends BaseController {
         // 获取表单数据
         $username = $this->getPostParam('username');
         $domain = $this->getPostParam('domain');
-        $fullName = $this->getPostParam('full_name');
+        // 自动使用username作为fullName
+        $fullName = $username;
         $password = $this->getPostParam('password');
         $confirmPassword = $this->getPostParam('confirm_password');
         $captcha = $this->getPostParam('captcha');
@@ -108,7 +109,7 @@ class ApiController extends BaseController {
         $minNameLength = isset($this->config['nameLength']) ? $this->config['nameLength'] : 3;
         $validator->validate($username, 'required|min:' . $minNameLength . '|username', '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符|用户名必须以小写字母开头，且只能包含小写字母和数字');
         $validator->validate($domain, 'required', '后缀不能为空');
-        $validator->validate($fullName, 'required', '昵称不能为空');
+        // 昵称验证已移除，因为现在自动使用username作为昵称
         $validator->validate($password, 'required|min:8', '密码不能为空|密码长度不能少于8个字符');
         $validator->validate($confirmPassword, 'required|same:' . $password, '确认密码不能为空|两次输入的密码不一致');
         $validator->validate($captcha, 'required', '验证码不能为空');
@@ -121,12 +122,14 @@ class ApiController extends BaseController {
             ], 400);
         }
         
-        // 如果验证失败，返回错误信息
+        // 如果验证失败，返回错误信息，使用第一个错误信息作为 message
         if ($validator->hasErrors()) {
+            $errors = $validator->getErrors();
+            $firstError = reset($errors);
             return $this->jsonResponse([
                 'status' => 'error',
-                'errors' => '表单验证失败',
-                'message' => $validator->getErrors()
+                'errors' => $errors,
+                'message' => $firstError
             ], 400);
         }
         
@@ -246,9 +249,8 @@ class ApiController extends BaseController {
         
         // 验证表单数据
         $validator = new Validator();
-        $minNameLength = isset($this->config['nameLength']) ? $this->config['nameLength'] : 3;
-        $validator->validate($username, 'required|min:' . $minNameLength . '|username', '账号名不能为空|账号名长度不能少于' . $minNameLength . '个字符|用户名必须以小写字母开头，且只能包含小写字母和数字');
-        $validator->validate($domain, 'required', '后缀不能为空');
+        // 用户名和域名已在前端从完整邮箱地址中提取
+        $validator->validate($username, 'required', '账号名不能为空');
         $validator->validate($password, 'required', '当前密码不能为空');
         $validator->validate($newPassword, 'required|min:8', '新密码不能为空|新密码长度不能少于8个字符');
         $validator->validate($confirmPassword, 'required|same:' . $newPassword, '确认密码不能为空|两次输入的密码不一致');
@@ -262,24 +264,24 @@ class ApiController extends BaseController {
             ], 400);
         }
         
-        // 如果验证失败，返回错误信息
+        // 如果验证失败，返回错误信息，使用第一个错误信息作为 message
         if ($validator->hasErrors()) {
+            $errors = $validator->getErrors();
+            $firstError = reset($errors);
             return $this->jsonResponse([
                 'status' => 'error',
-                'errors' => '表单验证失败',
-                'message' => $validator->getErrors()
+                'errors' => $errors,
+                'message' => $firstError
             ], 400);
         }
         
-        // 构建完整邮箱地址
-        $email = $username . '@' . $domain;
         
         // 调用宝塔API更新邮箱密码
         $apiUrl = $this->config['panel'] . '/plugin?action=a&name=mail_ext&s=update_password';
         
         // 构建API请求参数
         $p_data = Common::getKeyData($this->config["apikey"]) + array(
-            'username' => $email,
+            'username' => $username,
             'password' => $password,
             'new_password' => $newPassword
         );
@@ -311,7 +313,7 @@ class ApiController extends BaseController {
                 'status' => 'success',
                 'message' => $successMsg,
                 'data' => [
-                    'email' => $email
+                    'email' => $username
                 ]
             ]);
         } else {

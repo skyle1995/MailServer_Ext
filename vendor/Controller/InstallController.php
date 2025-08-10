@@ -143,15 +143,37 @@ class InstallController extends BaseController {
             $configContent .= "\$config['exclude'] = [];\n";
         }
         
+        // 检查是否为AJAX请求
+        $isAjax = $this->isAjax();
+        
         // 写入配置文件
         if (file_put_contents($configFile, $configContent)) {
-            // 安装成功，重定向到首页
-            $this->redirect('./?controller=home&action=index');
+            // 安装成功
+            if ($isAjax) {
+                // 如果是AJAX请求，返回JSON响应
+                $this->jsonResponse([
+                    'status' => 'success',
+                    'message' => '安装配置成功！',
+                    'redirect' => './?controller=home&action=index'
+                ]);
+            } else {
+                // 否则重定向到首页
+                $this->redirect('./?controller=home&action=index');
+            }
         } else {
-            // 安装失败，显示错误信息
-            $this->template->assign('error', '配置文件写入失败，请检查目录权限');
-            $this->template->assign('config', $this->config);
-            $this->display('install/index');
+            // 安装失败
+            if ($isAjax) {
+                // 如果是AJAX请求，返回JSON错误响应
+                $this->jsonResponse([
+                    'status' => 'error',
+                    'message' => '配置文件写入失败，请检查目录权限'
+                ], 500);
+            } else {
+                // 否则显示错误信息
+                $this->template->assign('error', '配置文件写入失败，请检查目录权限');
+                $this->template->assign('config', $this->config);
+                $this->display('install/index');
+            }
         }
     }
 }

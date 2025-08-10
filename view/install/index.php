@@ -1,306 +1,245 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : '邮件服务器插件安装'; ?></title>
-    <!-- 网站图标 -->
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- FontAwesome 图标库 -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- 自定义样式 -->
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-    <main>
-        <div class="container">
-            <div class="content-wrapper">
-                <div class="logo-container">
-                    <img src="assets/images/logo.svg" alt="Logo">
-                </div>
-                <div class="col-md-8">
-                    <div class="panel panel-primary" style="max-width: 480px; margin: 0 auto; border-radius: 6px; box-shadow: none;">
-                        <div class="panel-heading" style="text-align: center; border-radius: 6px 6px 0 0; border-bottom: 0px solid rgb(120, 194, 255);">
-                            <h3 class="panel-title">系统安装</h3>
+<div class="layui-panel form-panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">系统安装</h3>
+    </div>
+    <div class="panel-body">
+        <?php if (isset($error)): ?>
+            <div style="padding: 10px; border-radius: 4px; margin-bottom: 15px;background-color: #c2c2c2;">
+                <strong>错误：</strong> <?php echo $error; ?>
+            </div>
+            <div class="layui-form-item form-button-container">
+                <a href="./?controller=home&action=index" class="layui-btn layui-btn-primary"><i class="fas fa-home"></i> 返回首页</a>
+            </div>
+        <?php else: ?>
+            <form class="layui-form" method="post" action="?controller=install&action=save" lay-filter="installForm" id="installForm">
+                <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
+                <div class="layui-form-item">
+                    <label for="sitename">站点名称</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-globe"></i>
                         </div>
-                        <div class="panel-body">
-                            <?php if (isset($error)): ?>
-                            <div class="alert alert-danger">
-                                <strong>错误：</strong> <?php echo $error; ?>
+                        <input type="text" class="layui-input" id="sitename" name="sitename" placeholder="Anonymous Online Webmail" value="" lay-verify="required" lay-reqtext="请输入站点名称" autocomplete="off" lay-affix="clear">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请输入您的站点名称，例如：Anonymous Online Webmail</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="panel">宝塔面板地址</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <input type="text" class="layui-input" id="panel" name="panel" placeholder="https://127.0.0.1:8888" value="" lay-verify="required" lay-reqtext="请输入宝塔面板地址" autocomplete="off" lay-affix="clear">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">面板访问地址，例如：https://127.0.0.1:8888（不含/）</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="apikey">API接口密钥</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <input type="text" class="layui-input" id="apikey" name="apikey" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="" lay-verify="required" lay-reqtext="请输入API接口密钥" autocomplete="off" lay-affix="clear">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请在宝塔面板API接口中获取密钥</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="webmail">邮箱Webmail登录地址</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="text" class="layui-input" id="webmail" name="webmail" placeholder="https://127.0.0.1" value="" autocomplete="off" lay-affix="clear">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请输入您的Webmail访问地址，留空则不显示登录邮箱按钮</div>
+                </div>
+                <div class="layui-form-item">
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" name="openRegister" title="开启注册" lay-skin="primary" <?php echo isset($config['openRegister']) && $config['openRegister'] ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="openReplace" title="开启改密" lay-skin="primary" <?php echo isset($config['openReplace']) && $config['openReplace'] ? 'checked' : ''; ?>>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">开关功能，开放注册和改密功能</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="nameLength">注册名称最低长度</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-text-width"></i>
+                        </div>
+                        <input type="number" class="layui-input" id="nameLength" name="nameLength" value="<?php echo isset($config['nameLength']) ? $config['nameLength'] : '5'; ?>" min="1" lay-verify="required" lay-reqtext="请输入注册名称最低长度" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="emailQuota">邮箱容量</label>
+                    <div class="layui-row">
+                        <div class="layui-col-xs6" style="padding-right: 5px;">
+                            <div class="layui-input-wrap">
+                                <div class="layui-input-prefix">
+                                    <i class="fas fa-hdd"></i>
+                                </div>
+                                <input type="number" class="layui-input" id="emailQuota" name="emailQuota" value="<?php echo isset($config['emailQuota']) ? $config['emailQuota'] : '5'; ?>" min="1" lay-verify="required" lay-reqtext="请输入邮箱容量" autocomplete="off">
                             </div>
-                            <?php else: ?>
-                            <form method="post" action="?controller=install&action=save">
-                                <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
-                                <div class="form-group">
-                                    <label for="sitename">站点名称</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-globe"></i></span>
-                                        <input type="text" class="form-control" id="sitename" name="sitename" placeholder="Anonymous Online Webmail" value="" required>
-                                    </div>
-                                    <p class="help-block">请输入您的站点名称，例如：Anonymous Online Webmail</p>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="panel">宝塔面板地址</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-link"></i></span>
-                                        <input type="text" class="form-control" id="panel" name="panel" placeholder="https://127.0.0.1:8888" value="" required>
-                                    </div>
-                                    <p class="help-block">请输入您的宝塔面板访问地址，例如：https://127.0.0.1:8888</p>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="apikey">API接口密钥</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-key"></i></span>
-                                        <input type="text" class="form-control" id="apikey" name="apikey" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="" required>
-                                    </div>
-                                    <p class="help-block">请在宝塔面板API接口中获取密钥</p>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="webmail">邮箱Webmail登录地址</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
-                                        <input type="text" class="form-control" id="webmail" name="webmail" placeholder="https://127.0.0.1" value="">
-                                    </div>
-                                    <p class="help-block">请输入您的Webmail访问地址，留空则不显示登录邮箱按钮</p>
-                                </div>
-                                <div class="form-group">
-                                    <label>功能开关</label>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="openRegister" <?php echo isset($config['openRegister']) && $config['openRegister'] ? 'checked' : ''; ?>> 开启注册邮箱功能
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="openReplace" <?php echo isset($config['openReplace']) && $config['openReplace'] ? 'checked' : ''; ?>> 开启修改密码功能
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="nameLength">注册名称最低长度</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-text-width"></i></span>
-                                        <input type="number" class="form-control" id="nameLength" name="nameLength" value="<?php echo isset($config['nameLength']) ? $config['nameLength'] : '5'; ?>" min="1" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="emailQuota">邮箱容量</label>
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="fas fa-hdd"></i></span>
-                                                <input type="number" class="form-control" id="emailQuota" name="emailQuota" value="<?php echo isset($config['emailQuota']) ? $config['emailQuota'] : '5'; ?>" min="1" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6">
-                                            <select class="form-control" name="emailQuotaUnit" style="height: 40px;">
-                                                <option value="MB" <?php echo isset($config['emailQuotaUnit']) && $config['emailQuotaUnit'] === 'MB' ? 'selected' : ''; ?>>MB</option>
-                                                <option value="GB" <?php echo isset($config['emailQuotaUnit']) && $config['emailQuotaUnit'] === 'GB' ? 'selected' : ''; ?>>GB</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="superKey">超级密钥</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-lock"></i></span>
-                                        <input type="text" class="form-control" id="superKey" name="superKey" value="" required>
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-primary" style="height: 40px;" onclick="generateRandomKey()"><i class="fas fa-random"></i> 随机生成</button>
-                                        </span>
-                                    </div>
-                                    <p class="help-block">用于API对接认证，请设置复杂密钥并妥善保管</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exclude">域名过滤表（每行一个域名）</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-filter"></i></span>
-                                        <textarea class="form-control" id="exclude" name="exclude" rows="5"></textarea>
-                                    </div>
-                                    <p class="help-block">这些域名将被隐藏或禁用</p>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="footer">底部版权信息</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fas fa-copyright"></i></span>
-                                        <input type="text" class="form-control" id="footer" name="footer" placeholder="© <?php echo date('Y'); ?> Anonymous Online Webmail. 保留所有权利。" value="">
-                                    </div>
-                                    <p class="help-block">显示在网站底部的版权信息</p>
-                                </div>
-                                
-                                <div class="form-group" style="text-align: center; margin-top: 20px;">
-                                    <button type="submit" class="btn btn-primary btn-lg">保存配置并安装</button>
-                                </div>
-                            </form>
-                            <?php endif; ?>
+                        </div>
+                        <div class="layui-col-xs6" style="padding-left: 5px;">
+                            <select class="layui-select" name="emailQuotaUnit">
+                                <option value="MB" <?php echo isset($config['emailQuotaUnit']) && $config['emailQuotaUnit'] === 'MB' ? 'selected' : ''; ?>>MB</option>
+                                <option value="GB" <?php echo isset($config['emailQuotaUnit']) && $config['emailQuotaUnit'] === 'GB' ? 'selected' : ''; ?>>GB</option>
+                            </select>
                         </div>
                     </div>
-                    <script>
-                    /**
-                     * 生成16位随机字符串（包含大小写英文字母和数字）
-                     */
-                    const generateRandomKey = () => {
-                        // 定义可能的字符集
-                        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                        let result = '';
-                        
-                        // 生成16位随机字符
-                        for (let i = 0; i < 16; i++) {
-                            const randomIndex = Math.floor(Math.random() * chars.length);
-                            result += chars.charAt(randomIndex);
-                        }
-                        
-                        // 设置到输入框
-                        document.getElementById('superKey').value = result;
-                    };
-                    </script>
                 </div>
-            </div>
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <div class="container">
-            <p style="color: #757575; font-size: 13px; margin: 0;"><?php echo isset($footer) ? $footer : '© ' . date('Y') . ' 邮件服务器插件. 保留所有权利。'; ?></p>
-        </div>
-    </footer>
-    
-    <!-- jQuery (Bootstrap 的依赖) -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!-- Layer弹出层 -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/layer/3.5.1/layer.js"></script>
-    <!-- 粒子效果库 (CDN版本) -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-    <!-- 自定义脚本 -->
-    <script src="assets/js/main.js"></script>
-    <!-- 初始化粒子效果 -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 创建粒子容器
-        const particlesContainer = document.createElement('div');
-        particlesContainer.id = 'particles-js';
-        document.body.insertBefore(particlesContainer, document.body.firstChild);
-        
-        // 初始化粒子效果
-        if (typeof particlesJS !== 'undefined') {
-            particlesJS('particles-js', {
-                particles: {
-                    number: {
-                        value: 100,
-                        density: {
-                            enable: true,
-                            value_area: 1000
-                        }
-                    },
-                    color: {
-                        value: ["#2196F3", "#4CAF50", "#FF9800", "#9C27B0"]
-                    },
-                    shape: {
-                        type: "circle",
-                        stroke: {
-                            width: 0,
-                            color: "#000000"
-                        }
-                    },
-                    opacity: {
-                        value: 0.5,
-                        random: false,
-                        anim: {
-                            enable: false,
-                            speed: 1,
-                            opacity_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    size: {
-                        value: 3,
-                        random: true,
-                        anim: {
-                            enable: false,
-                            speed: 40,
-                            size_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: "#2196F3",
-                        opacity: 0.4,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 3,
-                        direction: "none",
-                        random: true,
-                        straight: false,
-                        out_mode: "bounce",
-                        bounce: true,
-                        attract: {
-                            enable: true,
-                            rotateX: 600,
-                            rotateY: 1200
-                        }
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: {
-                            enable: true,
-                            mode: "repulse"
-                        },
-                        onclick: {
-                            enable: true,
-                            mode: "bubble"
-                        },
-                        resize: true
-                    },
-                    modes: {
-                        grab: {
-                            distance: 180,
-                            line_linked: {
-                                opacity: 1
-                            }
-                        },
-                        bubble: {
-                            distance: 300,
-                            size: 60,
-                            duration: 2,
-                            opacity: 0.8,
-                            speed: 3
-                        },
-                        repulse: {
-                            distance: 150,
-                            duration: 0.4
-                        },
-                        push: {
-                            particles_nb: 6
-                        },
-                        remove: {
-                            particles_nb: 2
-                        }
-                    }
-                },
-                retina_detect: true
-            });
-        } else {
-            console.error('粒子效果需要particlesJS库支持');
+
+                <div class="layui-form-item">
+                    <label for="superKey">超级密钥</label>
+                    <div style="display: flex;">
+                        <div style="flex: 1; margin-right: 10px;">
+                            <div class="layui-input-wrap">
+                                <div class="layui-input-prefix">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <input type="text" class="layui-input" id="superKey" name="superKey" value="" lay-verify="required" lay-reqtext="请输入超级密钥" autocomplete="off">
+                            </div>
+                        </div>
+                        <div style="flex: 0 0 auto;">
+                            <button type="button" class="layui-btn" onclick="generateRandomKey()"><i class="fas fa-random"></i> 随机生成</button>
+                        </div>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">用于API对接认证，请设置复杂密钥并妥善保管</div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="exclude">域名过滤表（每行一个域名）</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <textarea class="layui-textarea" id="exclude" name="exclude" placeholder="每行输入一个域名"></textarea>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">这些域名将被隐藏或禁用</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label for="footer">版权信息</label>
+                    <div class="layui-input-wrap">
+                        <div class="layui-input-prefix">
+                            <i class="fas fa-copyright"></i>
+                        </div>
+                        <input type="text" class="layui-input" id="footer" name="footer" placeholder="© <?php echo date('Y'); ?> Anonymous Online Webmail. 保留所有权利。" value="" autocomplete="off" lay-affix="clear">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">显示在网站底部的版权信息</div>
+                </div>
+
+                <div class="layui-form-item" style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="layui-btn layui-btn-fluid" lay-submit lay-filter="installForm"><i class="fas fa-save"></i> 保存配置并安装</button>
+                </div>
+            </form>
+        <?php endif; ?>
+    </div>
+</div>
+<script>
+    /**
+     * 生成16位随机字符串（包含大小写英文字母和数字）
+     */
+    const generateRandomKey = () => {
+        // 定义可能的字符集
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+
+        // 生成16位随机字符
+        for (let i = 0; i < 16; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            result += chars.charAt(randomIndex);
         }
-    });
-    </script>
-</body>
-</html>
+
+        // 设置到输入框
+        document.getElementById('superKey').value = result;
+    };
+    
+    // 当文档加载完成后执行
+    window.onload = function() {
+        // 确保 layui 已加载
+        if (typeof layui !== 'undefined') {
+            layui.use(['form', 'layer'], function() {
+                var form = layui.form;
+                var layer = layui.layer;
+                
+                // 监听表单提交
+                form.on('submit(installForm)', function(data) {
+                    // 显示加载层
+                    var loadingIndex = layer.msg('正在安装中...', {
+                        icon: 16,
+                        shade: [0.3, '#000'], // 0.3透明度的黑色背景
+                        shadeClose: false // 禁止点击遮罩关闭
+                    });
+                    
+                    // 提交表单
+                    $.ajax({
+                        url: '?controller=install&action=save',
+                        type: 'POST',
+                        data: $('#installForm').serialize(),
+                        dataType: 'json',
+                        success: function(response) {
+                            // 关闭加载层
+                            layer.close(loadingIndex);
+                            
+                            // 获取消息文本，默认为'安装配置成功！'
+                            var message = '安装配置成功！';
+                            if (response && response.message) {
+                                message = response.message;
+                            }
+                            
+                            // 获取重定向URL，默认为首页
+                            var redirectUrl = './?controller=home&action=index';
+                            if (response && response.redirect) {
+                                redirectUrl = response.redirect;
+                            }
+                            
+                            // 显示安装成功弹窗
+                            layer.alert(message, {
+                                icon: 1,
+                                title: '安装成功',
+                                btn: ['确定'],
+                                yes: function(index) {
+                                    layer.close(index);
+                                    // 跳转到指定页面
+                                    window.location.href = redirectUrl;
+                                }
+                            });
+                        },
+                        error: function(xhr) {
+                            // 关闭加载层
+                            layer.close(loadingIndex);
+                            
+                            // 尝试解析错误信息
+                            var errorMessage = '安装失败，请检查配置并重试';
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.message) {
+                                    errorMessage = response.message;
+                                }
+                            } catch (e) {
+                                // 如果响应不是JSON格式，尝试从HTML中提取错误信息
+                                var match = xhr.responseText.match(/<div class="layui-bg-red"[^>]*>\s*<strong>错误：<\/strong>\s*([^<]+)<\/div>/);
+                                if (match && match[1]) {
+                                    errorMessage = match[1].trim();
+                                }
+                            }
+                            
+                            // 显示错误信息
+                            layer.alert(errorMessage, {
+                                icon: 2,
+                                title: '安装失败'
+                            });
+                        }
+                    });
+                    
+                    return false; // 阻止表单默认提交
+                });
+            });
+        }
+    };
+</script>

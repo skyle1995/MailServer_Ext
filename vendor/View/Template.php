@@ -115,7 +115,7 @@ class Template {
         
         // 检查是否为Ajax请求
         $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
-                 strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
         
         // 如果设置了布局模板且不是Ajax请求，则尝试渲染布局
         if ($this->layout !== null && !$isAjax) {

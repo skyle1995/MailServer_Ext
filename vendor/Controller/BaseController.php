@@ -6,6 +6,7 @@ namespace Controllers;
 
 use View\Template;
 use Core\Request;
+use Verification\ValidateCode;
 
 /**
  * BaseController类 - 所有控制器的基类
@@ -326,5 +327,59 @@ class BaseController {
         // 输出文本数据
         echo $text;
         exit;
+    }
+    
+    /**
+     * 生成验证码图片
+     * 
+     * 生成验证码图片并将验证码保存到会话中
+     */
+    public function captchaAction() {
+        // 创建验证码对象
+        $validateCode = new ValidateCode();
+        
+        // 生成验证码图片
+        $validateCode->doimg();
+        
+        // 获取验证码并保存到会话中
+        $_SESSION['captcha'] = $validateCode->getCode();
+        
+        // 直接输出图片，不需要返回
+        exit;
+    }
+    
+    /**
+     * 生成CSRF令牌
+     * 
+     * @return string CSRF令牌
+     */
+    protected function generateCsrfToken() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        
+        return $_SESSION['csrf_token'];
+    }
+    
+    /**
+     * 验证CSRF令牌
+     * 
+     * @param string $token 要验证的令牌
+     * @return bool 验证结果
+     */
+    protected function validateCsrfToken($token = null) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if ($token === null) {
+            $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+        }
+        
+        return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
 }

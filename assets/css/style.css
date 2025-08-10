@@ -1,7 +1,8 @@
 /**
- * 自定义样式表
+ * Layui自定义样式表
  * 
- * 这个文件包含网站的自定义CSS样式
+ * 这个文件包含使用Layui重构的网站样式
+ * 包括从内联样式整合的新样式类
  */
 
 /* 全局样式 */
@@ -27,7 +28,7 @@ body {
 }
 
 /* 页脚样式 */
-footer.footer {
+.layui-footer {
     padding: 15px 0;
     text-align: center;
     width: 100%;
@@ -39,19 +40,7 @@ footer.footer {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* 添加顶部阴影，增强视觉分离 */
 }
 
-/* 自定义按钮样式 */
-.btn-custom {
-    background-color: #5bc0de;
-    border: none;
-    color: #ffffff;
-    border-radius: 4px;
-}
-
-.btn-custom:hover {
-    background-color: #4babc7;
-    color: #ffffff;
-}
-
+/* 内容包装器样式 */
 .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -62,14 +51,13 @@ footer.footer {
     padding-bottom: 20px; /* 减少底部填充，因为页脚现在会自然跟随内容 */
 }
 
-/* 内容居中样式 */
-.content-center {
+/* 自定义布局样式，替代layui-layout-admin */
+.layui-layout {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 70vh;
-    margin-top: 20vh;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
 }
 
 /* Logo容器样式 */
@@ -84,9 +72,10 @@ footer.footer {
     margin-bottom: 15px;
 }
 
-.logo-container h2 {
-    font-weight: 300;
-    color: #333;
+/* 网站标题容器样式 */
+.site-title-container {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 /* 扁平化网站标题样式 */
@@ -103,88 +92,17 @@ footer.footer {
     color: #1976D2;
 }
 
-/* 验证码图片样式 */
-#captcha_img {
-    border: 1px solid #eaeaea;
-    height: 40px !important;
-    border-radius: 4px;
+/* 自定义Layui样式 */
+.layui-input, .layui-textarea {
+    height: 38px;
+    border: 1px solid #e6e6e6;
 }
 
-/* 帮助文本样式 */
-.help-block {
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-.text-danger {
-    color: #F44336;
-}
-
-/* 面板样式 */
-.panel {
-    border-radius: 6px;
-    border: 1px solid #eaeaea;
-    margin-top: 50px;
-    overflow: hidden;
-}
-
-.panel-heading {
-    border-radius: 6px 6px 0 0;
-    padding: 15px;
-}
-
-.panel-body {
-    padding: 20px 20px 5px 20px;
-}
-
-/* 表单样式 */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.input-group {
-    width: 100%;
-}
-
-.input-group-addon {
-    background-color: #fafafa;
-    border: 1px solid #eaeaea;
-    color: #555;
-    min-width: 40px;
-    border-radius: 4px 0 0 4px;
-}
-
-.form-control {
-    height: 40px;
-    border: 1px solid #eaeaea;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.form-control:focus {
-    border-color: #2196F3;
-    outline: none;
-    box-shadow: none;
-}
-
-select.form-control {
-    padding-left: 10px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
+.layui-input:focus, .layui-textarea:focus {
+    border-color: #1E9FFF !important;
 }
 
 /* 按钮样式 */
-.btn {
-    border-radius: 4px;
-    border: none;
-    font-weight: 400;
-}
-
-/* 响应式按钮样式 */
 .action-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -193,10 +111,128 @@ select.form-control {
     margin-top: 20px;
 }
 
-/* 首页按钮保持原样式 */
+.layui-btn {
+    border-radius: 4px;
+}
 
+.layui-btn-lg {
+    padding: 0 25px;
+    font-size: 16px;
+    height: 44px;
+    line-height: 44px;
+    min-width: 120px;
+}
+
+.layui-btn-normal {
+    background-color: #2196F3;
+}
+
+.layui-btn-normal:hover {
+    background-color: #1976D2;
+}
+
+.layui-btn-primary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.layui-btn-primary:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.layui-btn-success {
+    background-color: #4CAF50;
+}
+
+.layui-btn-success:hover {
+    background-color: #388E3C;
+}
+
+/* 面板样式 */
+.layui-panel {
+    border-radius: 6px;
+    border: 1px solid #eaeaea;
+    margin-top: 50px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+}
+
+.panel-heading {
+    background-color: #79bdf1;
+    color: #0c0c0c;
+    border-radius: 6px 6px 0 0;
+    padding: 15px;
+    text-align: center;
+}
+
+.panel-body {
+    padding: 20px 20px 5px 20px;
+}
+
+/* 表单面板样式 */
+.form-panel {
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+/* 验证码容器样式 */
+.captcha-container {
+    text-align: right;
+}
+
+/* 验证码图片样式 */
+.captcha-img {
+    height: 36px !important;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    cursor: pointer;
+    max-width: 100%;
+    display: inline-block;
+}
+
+/* 表单按钮容器样式 */
+.form-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 表单按钮样式 */
+.form-button {
+    width: 100%;
+    /* 移除最大宽度限制，使按钮占据100%宽度 */
+}
+
+/* 错误信息样式 */
+.form-error {
+    color: #FF5722;
+}
+
+/* 返回链接样式 */
+.back-link {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.back-link a {
+    color: #1E9FFF;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* 页脚文本样式 */
+.footer-text {
+    color: #757575;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* 响应式样式 */
 @media (max-width: 768px) {
-    .action-buttons .btn {
+    .action-buttons .layui-btn {
         margin: 5px 0;
         width: 100%;
     }
@@ -205,49 +241,11 @@ select.form-control {
         padding-bottom: 50px; /* 减小底部填充，适应移动设备 */
     }
     
-    footer.footer {
+    .layui-footer {
         padding: 10px 0; /* 减小页脚内边距 */
     }
     
-    footer.footer p {
+    .layui-footer p {
         font-size: 12px; /* 减小字体大小 */
     }
-}
-
-.btn-lg {
-    padding: 10px 20px;
-    font-size: 16px;
-    min-width: 120px;
-}
-
-.btn-primary {
-    background-color: #2196F3;
-}
-
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-    background-color: #1976D2;
-}
-
-.btn-default {
-    background-color: #f0f0f0;
-    color: #333;
-}
-
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active {
-    background-color: #e0e0e0;
-    color: #333;
-}
-
-.btn-success {
-    background-color: #4CAF50;
-}
-
-.btn-success:hover,
-.btn-success:focus,
-.btn-success:active {
-    background-color: #388E3C;
 }

@@ -1,322 +1,224 @@
-<div class="panel panel-primary" style="max-width: 480px; margin: 0 auto; border-radius: 6px; box-shadow: none;">
-    <div class="panel-heading" style="text-align: center; border-radius: 6px 6px 0 0; border-bottom: 0px solid rgb(120, 194, 255);">
+<div class="layui-panel form-panel">
+    <div class="panel-heading">
         <h3 class="panel-title">修改邮箱密码</h3>
     </div>
     <div class="panel-body">
         <div id="server-messages"></div>
-        <form id="replaceForm">
+        <form class="layui-form" id="replaceForm" lay-filter="replaceForm">
             <input type="hidden" name="csrf_token" value="<?php echo csrf_token(); ?>">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-user"></i></span>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入账号名" value="<?php echo isset($username) ? $username : ''; ?>" required>
+            
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <input type="text" class="layui-input" id="username" name="username" placeholder="请输入邮箱账号" value="<?php echo isset($username) ? $username : ''; ?>" lay-verify="required|email" lay-reqtext="请输入邮箱账号" autocomplete="off" lay-affix="clear">
                 </div>
-                <?php if (isset($errors['username'])): ?>
-                <span class="help-block text-danger"><?php echo $errors['username']; ?></span>
-                <?php endif; ?>
+                <!-- 错误信息通过JavaScript的layer.tips显示 -->
             </div>
             
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-globe"></i></span>
-                    <select class="form-control" id="domain" name="domain" required>
-                        <option value="">请选择邮箱后缀</option>
-                        <!-- 域名列表将通过AJAX动态加载 -->
-                    </select>
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <input type="password" class="layui-input" id="password" name="password" placeholder="请输入当前密码" lay-verify="required" lay-reqtext="请输入当前密码" autocomplete="off" lay-affix="eye">
                 </div>
-                <!-- 使用layer.alert替代了原来的错误提示 -->
+                <!-- 错误信息通过JavaScript的layer.tips显示 -->
             </div>
             
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-lock"></i></span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="请输入当前密码" required>
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <input type="password" class="layui-input" id="new_password" name="new_password" placeholder="请输入新的密码" lay-verify="required" lay-reqtext="请输入新密码" autocomplete="off" lay-affix="eye">
                 </div>
-                <?php if (isset($errors['password'])): ?>
-                <span class="help-block text-danger"><?php echo $errors['password']; ?></span>
-                <?php endif; ?>
+                <!-- 错误信息通过JavaScript的layer.tips显示 -->
             </div>
             
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-key"></i></span>
-                    <input type="password" class="form-control" id="new_password" name="new_password" placeholder="请输入新的密码" required>
+            <div class="layui-form-item">
+                <div class="layui-input-wrap">
+                    <div class="layui-input-prefix">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <input type="password" class="layui-input" id="confirm_password" name="confirm_password" placeholder="请再次输入密码" lay-verify="required" lay-reqtext="请再次输入密码" autocomplete="off" lay-affix="eye">
                 </div>
-                <?php if (isset($errors['new_password'])): ?>
-                <span class="help-block text-danger"><?php echo $errors['new_password']; ?></span>
-                <?php endif; ?>
+                <!-- 错误信息通过JavaScript的layer.tips显示 -->
             </div>
             
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-check-circle"></i></span>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="请再次输入新密码" required>
+            <div class="layui-form-item">
+                <div style="display: flex; align-items: center;">
+                    <div style="flex: 1; margin-right: 10px;">
+                        <div class="layui-input-wrap">
+                            <div class="layui-input-prefix">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <input type="text" class="layui-input" id="captcha" name="captcha" placeholder="请输入验证码" lay-verify="required" lay-reqtext="请输入验证码" autocomplete="off" lay-affix="clear">
+                        </div>
+                    </div>
+                    <div style="flex: 0 0 auto;">
+                        <img id="captcha_img" src="?controller=base&action=captcha" alt="验证码" class="captcha-img" onclick="refreshCaptcha()">
+                    </div>
                 </div>
-                <?php if (isset($errors['confirm_password'])): ?>
-                <span class="help-block text-danger"><?php echo $errors['confirm_password']; ?></span>
-                <?php endif; ?>
+                <!-- 错误信息通过JavaScript的layer.tips显示 -->
             </div>
             
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fas fa-shield-alt"></i></span>
-                    <input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入验证码" required>
-                    <span class="input-group-addon" style="padding: 0; background: none; border: none;">
-                        <img id="captcha_img" src="?controller=home&action=captcha" alt="验证码" style="height: 40px; cursor: pointer; border: 1px solid #eaeaea; border-radius: 4px;" onclick="refreshCaptcha()">
-                    </span>
-                </div>
-                <?php if (isset($errors['captcha'])): ?>
-                <span class="help-block text-danger"><?php echo $errors['captcha']; ?></span>
-                <?php endif; ?>
-            </div>
-            
-            <div class="form-group" style="text-align: center; margin-top: 20px;">
-                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; max-width: 300px;">确认修改</button>
+            <div class="layui-form-item form-button-container">
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-lg form-button" lay-submit lay-filter="replaceForm">确认修改</button>
             </div>
         </form>
     </div>
 </div>
 
-<div style="text-align: center; margin-top: 5px;">
-    <a href="." class="btn btn-link" style="display: inline-block; width: 100%; max-width: 300px;"><i class="fas fa-home"></i> 返回首页</a>
+<div class="back-link">
+    <a href="."><i class="fas fa-home"></i> 返回首页</a>
 </div>
 
 <script>
 // 刷新验证码函数
 function refreshCaptcha() {
-    document.getElementById('captcha_img').src = '?controller=home&action=captcha&t=' + new Date().getTime();
+    document.getElementById('captcha_img').src = '?controller=base&action=captcha&t=' + new Date().getTime();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // 确保 jQuery 已加载
-    if (typeof $ !== 'undefined') {
-        // 加载域名列表
-        function loadDomains() {
-            // 使用layer.msg显示加载提示，设置黑色透明背景并禁止操作
-            var loadIndex = layer.msg('加载中', {
-                icon: 16,
-                shade: [0.3, '#000'], // 0.3透明度的黑色背景
-                shadeClose: false // 禁止点击遮罩关闭
-            });
-            
-            $.ajax({
-                url: '?controller=api&action=domains',
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    // 关闭加载层
-                    layer.close(loadIndex);
+// 等待页面加载完成
+window.onload = function() {
+    // 确保 layui 已加载
+    if (typeof layui !== 'undefined') {
+        // 使用 layui 的方式处理 DOM 就绪事件
+        layui.use(['form', 'layer', 'jquery'], function() {
+    var form = layui.form;
+    var layer = layui.layer;
+    var $ = layui.jquery; // 使用 layui 内置的 jQuery
+    
+    // 表单验证规则
+    form.verify({
+        email: function(value) {
+            if (!/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+                return '请输入有效的邮箱地址';
+            }
+        },
+        password: function(value) {
+            if (value.length < 8) {
+                return '密码长度不能少于8个字符';
+            }
+        },
+        confirmPassword: function(value) {
+            var password = $('#new_password').val();
+            if (value !== password) {
+                return '两次输入的密码不一致';
+            }
+        }
+    });
+    
+    // 域名列表加载已移除，现在使用完整邮箱地址
+    
+    // 检查是否禁用修改密码功能
+    <?php if (isset($disabled) && $disabled): ?>
+    layer.alert('<?php echo isset($disabled_message) ? $disabled_message : "修改密码功能当前未开放"; ?>', {
+        icon: 0,
+        title: '提示',
+        closeBtn: 0,
+        btn: ['返回首页'],
+        yes: function(index, layero) {
+            window.location.href = '.';
+        }
+    });
+    <?php endif; ?>
+    // 处理表单提交
+
+    // 表单提交事件
+    form.on('submit(replaceForm)', function(data) {
+        // 获取表单数据
+        var field = data.field;
+        
+        // 表单验证已由Layui的verify处理，这里只需要进行AJAX提交
+        // 显示加载层，使用layer.msg，设置黑色透明背景并禁止操作
+        var loadingIndex = layer.msg('加载中', {
+            icon: 16,
+            shade: [0.3, '#000'], // 0.3透明度的黑色背景
+            shadeClose: false // 禁止点击遮罩关闭
+        });
+                
+        // 通过AJAX提交表单
+        $.ajax({
+            url: '?controller=api&action=replace',
+            type: 'POST',
+            data: field, // 直接使用Layui表单收集的数据
+            dataType: 'json',
+            success: function(response) {
+                // 关闭加载层
+                layer.close(loadingIndex);
+                
+                // 刷新验证码
+                refreshCaptcha();
+                
+                if (response.status === 'success') {
+                    // 清理表单
+                    $('#replaceForm')[0].reset();
                     
-                    if (response.status === 'success' && response.data && response.data.length > 0) {
-                        var domainSelect = $('#domain');
-                        domainSelect.find('option:not(:first)').remove();
-                        
-                        $.each(response.data, function(index, domain) {
-                            domainSelect.append($('<option></option>').val(domain).text(domain));
-                        });
-                    } else {
-                        layer.alert(response.message || '无法获取可用后缀列表，请刷新页面重试。', {
-                            icon: 2,
-                            title: '错误提示',
-                            btn: ['确定']
+                    // 使用弹出层显示成功信息
+                    layer.alert('<div style="text-align:center;padding:20px;">'
+                            + '<p style="font-size:20px;margin-bottom:10px;color:green;">修改密码成功！</p>'
+                            + '<p>您的邮箱地址是：<strong>' + response.data.email + '</strong></p>'
+                            + '<p>您现在可以使用新密码登录邮箱系统。</p>'
+                            + '</div>', {
+                        title: '修改成功',
+                        btn: ['关闭'],
+                        area: ['400px', 'auto'],
+                        shade: 0.6,
+                        shadeClose: false
+                    });
+                } else {
+                    // 修改失败，使用layer提示框显示错误信息
+                    layer.msg(response.message, {
+                        icon: 2,  // 错误图标
+                        time: 3000,  // 3秒后自动关闭
+                        anim: 6,  // 抖动动画
+                        shade: [0.3, '#000']  // 遮罩
+                    });
+                    
+                    // 如果有字段错误，使用layer.tips显示错误信息
+                    if (response.errors) {
+                        $.each(response.errors, function(fieldName, error) {
+                            layer.tips(error, '#' + fieldName, {
+                                tips: [2, '#FF5722'],  // 右侧显示，红色背景
+                                time: 4000  // 4秒后自动关闭
+                            });
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    // 关闭加载层
-                    layer.close(loadIndex);
-                    layer.alert('加载域名列表失败，请刷新页面重试。', {
-                        icon: 2,
-                        title: '错误提示',
-                        btn: ['确定']
-                    });
-                    console.error('加载域名列表失败:', error);
                 }
-            });
-        }
-        
-        // 页面加载时获取域名列表
-        loadDomains();
-        
-        // 检查是否禁用修改密码功能
-        <?php if (isset($disabled) && $disabled): ?>
-        layer.alert('<?php echo isset($disabled_message) ? $disabled_message : "修改密码功能当前未开放"; ?>', {
-            icon: 0,
-            title: '提示',
-            closeBtn: 0,
-            btn: ['返回首页'],
-            yes: function(index, layero) {
-                window.location.href = '.';
-            }
-        });
-        <?php endif; ?>
-        // 处理表单提交
-
-        // 表单提交前验证并通过AJAX提交
-        $('#replaceForm').on('submit', function(e) {
-            e.preventDefault(); // 阻止表单默认提交行为
-            
-            var username = $('#username').val().trim();
-            var domain = $('#domain').val();
-            var password = $('#password').val();
-            var newPassword = $('#new_password').val();
-            var confirmPassword = $('#confirm_password').val();
-            var captcha = $('#captcha').val().trim();
-            var isValid = true;
-            
-            // 清除之前的错误提示
-            $('.help-block.text-danger').remove();
-            
-            var errorMessage = '';
-            
-            // 验证用户名
-            if (username === '') {
-                errorMessage = '请输入账号名';
-                isValid = false;
-            } else if (username.length < 3) {
-                errorMessage = '账号名长度不能少于3个字符';
-                isValid = false;
-            } else if (!/^[a-z][a-z0-9]*$/.test(username)) {
-                errorMessage = '用户名必须以小写字母开头，且只能包含小写字母和数字';
-                isValid = false;
-            }
-            
-            // 验证域名
-            if (domain === '' && isValid) {
-                errorMessage = '请选择后缀';
-                isValid = false;
-            }
-            
-            // 验证当前密码
-            if (password === '' && isValid) {
-                errorMessage = '请输入当前密码';
-                isValid = false;
-            }
-            
-            // 验证新密码
-            if (newPassword === '' && isValid) {
-                errorMessage = '请输入新密码';
-                isValid = false;
-            } else if (newPassword.length < 8 && isValid) {
-                errorMessage = '新密码长度不能少于8个字符';
-                isValid = false;
-            }
-            
-            // 验证确认密码
-            if (confirmPassword === '' && isValid) {
-                errorMessage = '请再次输入新密码';
-                isValid = false;
-            } else if (newPassword !== confirmPassword && isValid) {
-                errorMessage = '两次输入的新密码不一致';
-                isValid = false;
-            }
-            
-            // 验证验证码
-            if (captcha === '' && isValid) {
-                errorMessage = '请输入验证码';
-                isValid = false;
-            }
-            
-            // 如果验证失败，显示错误信息
-            if (!isValid) {
+            },
+            error: function(xhr, status, error) {
+                // 关闭加载层
+                layer.close(loadingIndex);
+                
+                // 刷新验证码
+                refreshCaptcha();
+                
+                // 显示错误信息
+                var errorMessage = '请求失败，请稍后再试';
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMessage = response.message;
+                    }
+                } catch (e) {
+                    console.error('解析响应失败', e);
+                }
+                
                 layer.msg(errorMessage, {
                     icon: 2,  // 错误图标
                     time: 3000,  // 3秒后自动关闭
                     anim: 6,  // 抖动动画
                     shade: [0.3, '#000']  // 遮罩
                 });
-                return false;
-            }
-            
-            if (isValid) {
-                // 显示加载层，使用layer.msg，设置黑色透明背景并禁止操作
-                var loadingIndex = layer.msg('加载中', {
-                    icon: 16,
-                    shade: [0.3, '#000'], // 0.3透明度的黑色背景
-                    shadeClose: false // 禁止点击遮罩关闭
-                });
-                
-                // 通过AJAX提交表单
-                $.ajax({
-                    url: '?controller=api&action=replace',
-                    type: 'POST',
-                    data: {
-                        username: username,
-                        domain: domain,
-                        password: password,
-                        new_password: newPassword,
-                        confirm_password: confirmPassword,
-                        captcha: captcha,
-                        csrf_token: $('input[name="csrf_token"]').val()
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        // 关闭加载层
-                        layer.close(loadingIndex);
-                        
-                        if (response.status === 'success') {
-                            // 清理表单
-                            $('#replaceForm')[0].reset();
-                            
-                            // 使用弹出层显示成功信息
-                            layer.alert('<div style="text-align:center;padding:20px;">'
-                                    + '<p style="font-size:20px;margin-bottom:10px;color:green;">修改密码成功！</p>'
-                                    + '<p>您的邮箱地址是：<strong>' + response.data.email + '</strong></p>'
-                                    + '<p>您现在可以使用新密码登录邮箱系统。</p>'
-                                    + '</div>', {
-                                title: '修改成功',
-                                btn: ['关闭'],
-                                area: ['400px', 'auto'],
-                                shade: 0.6,
-                                shadeClose: false
-                            });
-                        } else {
-                            // 修改失败，使用layer提示框显示错误信息
-                            layer.msg(response.message, {
-                                icon: 2,  // 错误图标
-                                time: 3000,  // 3秒后自动关闭
-                                anim: 6,  // 抖动动画
-                                shade: [0.3, '#000']  // 遮罩
-                            });
-                            
-                            // 如果有字段错误，使用layer.tips显示错误信息
-                            if (response.errors) {
-                                $.each(response.errors, function(field, error) {
-                                    layer.tips(error, '#' + field, {
-                                        tips: [2, '#FF5722'],  // 右侧显示，红色背景
-                                        time: 4000  // 4秒后自动关闭
-                                    });
-                                });
-                            }
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // 关闭加载层
-                        layer.close(loadingIndex);
-                        
-                        // 显示错误信息
-                        var errorMessage = '请求失败，请稍后再试';
-                        try {
-                            var response = JSON.parse(xhr.responseText);
-                            if (response.message) {
-                                errorMessage = response.message;
-                            }
-                        } catch (e) {
-                            console.error('解析响应失败', e);
-                        }
-                        
-                        layer.msg(errorMessage, {
-                            icon: 2,  // 错误图标
-                            time: 3000,  // 3秒后自动关闭
-                            anim: 6,  // 抖动动画
-                            shade: [0.3, '#000']  // 遮罩
-                        });
-                    }
-                });
             }
         });
-    } else {
-        console.error('jQuery 未加载，表单验证无法工作');
+        
+        return false; // 阻止表单默认提交
+    });
+        });
     }
-});
+};
 </script>

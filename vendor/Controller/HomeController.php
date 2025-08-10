@@ -6,7 +6,6 @@ namespace Controllers;
 
 use Core\Network;
 use Core\Common;
-use Verification\ValidateCode;
 
 /**
  * HomeController类 - 处理首页相关请求
@@ -24,44 +23,6 @@ class HomeController extends BaseController {
         
         // 设置该控制器的默认响应类型为HTML
         $this->setDefaultResponseType(self::RESPONSE_TYPE_HTML);
-    }
-
-    /**
-     * 获取可用域名列表
-     * 
-     * 从宝塔API获取可用的邮箱域名列表，并排除配置中指定的域名
-     * 
-     * @return array 域名列表：{"data":["example.com","example1.com","example2.com","example3.com","example4.com"]}
-     */
-    private function getDomains() {
-        // 调用宝塔API获取域名列表
-        $url = $this->config["panel"] . '/plugin?action=a&name=mail_ext&s=get_domain';
-        $p_data = Common::getKeyData($this->config["apikey"]);
-        
-        // 发送API请求
-        $result = Network::curlSenior($url, 'POST', http_build_query($p_data));
-        $response = json_decode($result, true);
-        
-        // 处理API响应
-        if ($response && isset($response['status']) && $response['status'] && isset($response['data'])) {
-            $domains = $response['data'];
-            
-            // 检查是否有需要排除的域名
-            if (isset($this->config['exclude']) && is_array($this->config['exclude']) && !empty($this->config['exclude'])) {
-                // 过滤掉需要排除的域名
-                $domains = array_filter($domains, function($domain) {
-                    return !in_array($domain, $this->config['exclude']);
-                });
-                
-                // 重新索引数组
-                $domains = array_values($domains);
-            }
-            
-            return $domains;
-        }
-        
-        // 如果API请求失败，返回空数组
-        return [];
     }
 
     /**
@@ -104,25 +65,6 @@ class HomeController extends BaseController {
         
         // 显示注册表单（域名列表通过AJAX获取）
         $this->display('home/register');
-    }
-    
-    /**
-     * 生成验证码图片
-     * 
-     * 生成验证码图片并将验证码保存到会话中
-     */
-    public function captchaAction() {
-        // 创建验证码对象
-        $validateCode = new ValidateCode();
-        
-        // 生成验证码图片
-        $validateCode->doimg();
-        
-        // 获取验证码并保存到会话中
-        $_SESSION['captcha'] = $validateCode->getCode();
-        
-        // 直接输出图片，不需要返回
-        exit;
     }
     
     /**
